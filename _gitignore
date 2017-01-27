@@ -1,0 +1,6 @@
+*.pyc
+config
+*.nja
+vk_config.json
+settings.py
+__pycache__
