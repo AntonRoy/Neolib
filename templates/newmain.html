@@ -1,0 +1,145 @@
+{%extends "layer.html"%}
+{%block body%}
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <span class="navbar-brand">Электронная система управления библиотекой</span>
+        </div>
+        <div>
+            <ul class="nav navbar-nav">
+                <li><a href="{{ url_for('addbook') }}" >Добавить книгу</a></li>
+                <li><a href="{{ url_for('logout') }}">Выйти</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<br>
+<div class="container" align="center">
+    <ul class="nav nav-tabs" role="tablist">
+    <li class="{{a_stud}}"><a href="#student" role="tab" data-toggle="tab" id="astud">Поиск по ученику</a></li>
+    <li class="{{a_book}}"><a href="#book" role="tab" data-toggle="tab" id="abook">Поиск по книге</a></li>
+  </ul>
+
+
+  <div class="tab-content">
+
+
+    <div role="tabpanel" class="{{div_stud}}" id="student">
+    <h2 align="center">Поиск задолжностей</h2>
+    <form class="form-inline" method='post' id="name">
+        <input type="hidden" value="По ученику" name="select">
+        <div class="form-group">
+        <div class="form-group">
+            <input class="form-control input-md" type="search" name="name" placeholder="Имя">
+        </div>
+          <div class="form-group">
+            <input class="form-control input-md" type="search" name="surname" placeholder="Фамилия">
+        </div>
+            <div class="form-group">
+        <input class="btn btn-info col-md" type="submit" value="Поиск">
+</div><br>
+            <a style="color: RGB(119,119,119);" data-toggle="collapse" href="#hide"><ins>Расширенный поиск</ins></a>
+  <div class="collapse" id="hide">
+        <div class="form-group">
+        <b>Пол:</b>
+        <input type="radio" value="boy" name="gender">Мужской
+        <input type="radio" value="girl" name="gender">Женский
+        <b>	&nbsp;	&nbsp;</b>
+        <b>Класс:</b>
+        <select name="numclass">
+            <option>-</option>
+            {%for i in range(5, 12)%}
+            <option>{{i}}</option>
+            {%endfor%}
+
+        </select>
+        <select name="letterclass">
+            <option>-</option>
+            <option>А</option>
+            <option>Б</option>
+            <option>В</option>
+        </select><br>
+        </div>
+        </div>
+        </div>
+    </form>
+        <h3>{{error}}</h3>
+    {% if uch == True%}
+
+    <h3>{{stname}}</h3>
+        <h4>{{klass}}</h4>
+    <div class="panel-group">
+        {%for i in arrays[0]%}
+        <div class="panel panel-danger">
+                <div class="panel-body">
+                    <form method="post" id="form">
+                    <input type="hidden" value="{{i}}" name="stud">
+                    <input type="hidden" value="True" name="type">
+                    <a onclick="document.getElementById('form').submit(); return false; console.log('get');">{{i[0] + ', ' + i[1]}}</a>
+                    </form>
+                </div>
+        </div>
+            {%endfor%}
+    </div>
+    {%endif%}
+
+        </div>
+
+
+    <div role="tabpanel" class="{{div_book}}" id="book">
+        <h2 align="center">Поиск задолжностей</h2>
+    <form class="form-inline" method='post' >
+        <input type="hidden" value="По книге" name="select">
+        <div class="form-group">
+            <input class="form-control input-md" type="search" name="title" placeholder="Название">
+        </div>
+        <div class="form-group">
+            <input class="form-control input-md" type="search" name="surname" placeholder="Фамилия Автора">
+        </div>
+        <div class="form-group">
+            <input class="btn btn-info col-md" type="submit" value="Поиск">
+        </div>
+    </form>
+                <h3> {{error}}</h3>
+     {% if uch == False%}
+
+    <h3>{{stname}}</h3>
+    <div class="panel-group">
+        {%for i in arrays%}
+    <div class="panel panel-danger">
+            <div class="panel-body">
+                <form method="post" id="form">
+                <input type="hidden" value="{{i}}" name="stud">
+                <input type="hidden" value="False" name="type">
+                <a onclick="document.getElementById('form').submit(); return false; console.log('get');">{{i}}</a>
+                </form>
+            </div>
+    </div>
+            {%endfor%}
+    </div>
+    {%endif%}
+    </div>
+  </div>
+    </div>
+
+<!-- jQuery -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<!--<script>
+$["#astud"].find(a).click(function(){
+$["#book"].removeClass("active");
+$(this).addClass("active");
+$["#student"].addClass("active");
+});
+$["#abook"].find(a).click(function(){
+$["#student"].removeClass("active");
+$(this).addClass("active");
+$["#book"].addClass("active");
+});
+</script>-->
+
+
+{%endblock%}

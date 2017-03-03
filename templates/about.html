@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <title>Neo-lib</title>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+<div class="navbar navbar-fixed navbar-inverse">
+    <div class="container">
+        <div class="navbar-header">
+            <span class="navbar-brand">Электронная система управления библиотекой</span>
+        </div>
+        <form class="navbar-form navbar-right" method="post">
+      <div class="form-group">
+       <input type="text" class="form-control input-md" name = 'login' id="login" placeholder="логин">
+      </div>
+
+      <div class="form-group">
+       <input type="password" class="form-control input-md" name = 'password'  id='password' placeholder="пароль">
+      </div>
+
+     <input class="btn btn-success btn-md" type = 'submit'  value="Войти">
+        </form>
+    </div>
+</div>
+{% if error %}<h3 class="text-danger text-right"><strong>Ошибка:</strong>{{ error }} &nbsp; &nbsp;&nbsp; &nbsp;</h3> {% endif %}
+<div class="jumbotron">
+    <div class="container">
+        <h2>Школьная Библиотека</h2>
+        <p>Это web-приложение создано для управления школьной библиотекой</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4 div">
+        <h2>Зарегестрироваться</h2>
+        <b>Добавьте себя в базу данных, чтобы вы могли брать и отдавать книги:</b>
+        <div class="row" style="padding: 17px;">
+            <form method="post">
+                <input type="hidden" value="0" name="numb_form">
+                <div class="form-group">
+                    <label for="id">Ваш ID с gym1505.ru:</label>
+                    <input type="text" class="form-control input-md" id="id" name="id_stud" placeholder="AGIvanov">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control input-md" name="name_stud" placeholder="Ваше полное имя">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control input-md" name="surname_stud" placeholder="Ваша Фамилия">
+                </div>
+                <b>Ваш класс:</b>
+                <select name="grade_numb">
+                    {%for i in range(5, 12)%}
+                    <option>{{i}}</option>
+                    {%endfor%}
+                </select>
+                <select name="grade_letter">
+                    <option>A</option>
+                    <option>Б</option>
+                    <option>В</option>
+                </select>
+                <input class="btn btn-success btn-sm" type = 'submit'  value="Отправить!">
+            </form>
+        </div>
+    </div>
+    <div class="col-md-4 div">
+        <h2>Забрать книгу</h2>
+        <form method="post">
+            <input type="hidden" value="1" name="numb_form">
+            <div class="row" style="padding: 17px;">
+                <div class="form-group">
+                    <label for="id_add">Ваш ID с gym1505.ru:</label>
+                    <input type="text" class="form-control input-md" id="id_add" name="id_stud" placeholder="AGIvanov">
+                </div>
+                <div class="form-group">
+                    <label for="isbn">Используйте сканер, присоединенный к компьютеру в библиотеке</label>
+                    <input type="number" class="form-control input-md" name="name_stud" id="isbn" placeholder="штрих-код книги">
+                </div>
+                                <input class="btn btn-success btn-sm" type = 'submit'  value="Отправить!">
+
+            </div>
+        </form>
+    </div>
+    <div class="col-md-4 div">
+        <h2>Сдать книгу</h2>
+        <b></b>
+        <div class="row" style="padding: 17px;">
+            <form method="post">
+                <input type="hidden" value="1" name="numb_form">
+                <div class="form-group">
+                    <label for="isbn_2">Используйте сканер, присоединенный к компьютеру в библиотеке</label>
+                    <input type="number" class="form-control input-md" name="name_stud" id="isbn_2" placeholder="штрих-код книги">
+                </div>
+                <input class="btn btn-success btn-sm" type = 'submit'  value="Отправить!">
+            </form>
+        </div>
+
+    </div>
+
+</div>
+<footer>
+    <hr>
+  &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: gold">by Adventurous Community</span>
+    <br>
+</footer>
+</body>

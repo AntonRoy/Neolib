@@ -1,0 +1,74 @@
+{%extends "layer.html"%}
+{%block body%}
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <span class="navbar-brand">Электронная система управления библиотекой</span>
+        </div>
+        <div>
+            <ul class="nav navbar-nav">
+                <li><a href="{{ url_for('addbook') }}" >Добавить книгу</a></li>
+                <li><a href="{{ url_for('logout') }}">Выйти</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container" align="center">
+    <h2 align="center">Поиск задолжностей</h2>
+    <form class="form-inline" method='post' id="name">
+      <div class="row">
+          <div class="form-group">
+        <select name="select">
+    <option> По ученику</option>
+    <option> По книге</option>
+            </select>
+      </div>
+        <div class="form-group">
+            <input class="form-control input-md" type="search" name="search">
+        </div>
+            <div class="form-group">
+        <input class="btn btn-info col-md" type="submit" value="Поиск">
+        </div>
+        </div>
+    </form>
+    {% if uch == True%}
+    <h3>{{stname}}</h3>
+    <div class="table-responsive">
+    <table class="table table-hover table-bordered">
+       <thead>
+        <tr>
+            <th>Книга</th>
+            <th>Дата выдачи</th>
+            <th>Дата сдачи</th>
+        </tr>
+       </thead>
+        <tbody>
+        {%for i in arrays%}
+        <tr><th>{{i[0]}}</th><th>{{i[1]}}</th><th>{{i[2]}}</th></tr>
+        {%endfor%}
+        </tbody>
+    </table>
+    </div>
+    <br/>
+<form method="post" ><button class="btn btn-warning" value=True name="Change" onclick=this.value='False'; >Изменить данные</button></form>
+    {%elif uch == False%}
+<h3>{{stname}}</h3>
+<div class="table-responsive">
+    <table class="table table-hover table-bordered">
+        <thead>
+            <tr><th>Имя</th><th>Дата выдачи</th><th>Дата сдачи</th></tr>
+        </thead>
+        <tbody>
+            {%for i in arrays%}
+            <tr><th>{{i[0]}}</th><th>{{i[1]}}</th><th>{{i[2]}}</th></tr>
+            {%endfor%}
+        </tbody>
+    </table>
+</div>
+    <br/>
+<form method="post"><button class="btn btn-warning" value=True name="Change" onclick=this.value='False'; >Изменить данные</button></form>
+{%elif uch == 3%}
+{%endif%}
+    </div>
+{%endblock%}

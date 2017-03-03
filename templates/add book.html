@@ -1,0 +1,38 @@
+{%extends "layer.html"%}
+{% block body %}
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <span class="navbar-brand">Электронная система управления библиотекой</span>
+        </div>
+        <div>
+            <ul class="nav navbar-nav">
+                <li><a href="{{ url_for('main') }}" >Поиск задолжностей</a></li>
+                <li><a href="{{ url_for('logout') }}">Выйти</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+</br>
+<div align="center" class="container">
+    <h2>Добавление книги</h2>
+    <h3 class="text-success">{{all_returned}}</h3>
+    <h3 class="text-danger">{{problem}}</h3>
+<h4>Укажите штрих-код</h4>
+    <p>Введите штрих-код, указанный на книге, либо с помощью сканера, либо вручную.</p>
+    <form  class="form-inline" method=post id="automathics">
+        <div class="row">
+            <div class="form-group">
+                <input class="form-control input-xs-5" placeholder="штрих-код" type="text" name="scan">
+            </div>
+            <div class="form-group">
+                <input class="form-control input-xs-2" name="col" type="number" placeholder="всего"><br>
+            </div>
+            <div class="form-group">
+                <input class="btn btn-success" value="Отправить" type="submit" name='auto'>
+            </div>
+        </div>
+    </form>
+
+</div>
+{%endblock%}
