@@ -69,18 +69,19 @@ def Add_Book(isbn, cnt):
     except:
         print('Could not connect')
     cursor = connection.cursor()
+    request1 = cursor.execute(("select * from Books_Tab where ISBN = '{0}'").format(isbn)).fetchall()
+    if request1:
+        cursor.execute(("update Books_Tab set In_Stock = In_Stock + {1} where ISBN = '{0}'").format(isbn, cnt))
+        cursor.execute(("update Books_Tab set All_Books = All_Books + {1} where ISBN = '{0}'").format(isbn, cnt))
+        connection.commit()
+        connection.close()
+        return True
     book_meta = heh(isbn)
     if not book_meta[0]:
         connection.commit()
         connection.close()
         return False
-    request1 = cursor.execute(("select * from Books_Tab where ISBN = '{0}'").format(isbn)).fetchall()
-    if request1:
-        request = cursor.execute(("update Books_Tab set In_Stock = In_Stock + '{1}', All_Books + '{1}' where ISBN = '{0}'").format(isbn, cnt)).fetchall()
-        connection.commit()
-        connection.close()
-        return True
-    request2 = cursor.execute(("INSERT INTO Books_Tab (ISBN, Name_Of_Book, Author_Of_Book) VALUES ('{0}', '{1}', '{2}')").format(isbn, book_meta[1], book_meta[2])).fetchall()
+    request2 = cursor.execute(("INSERT INTO Books_Tab (ISBN, Name_Of_Book, Author_Of_Book, In_Stock, All_Books) VALUES ('{0}', '{1}', '{2}', '{3}', '{3}')").format(isbn, book_meta[1], book_meta[2], cnt)).fetchall()
     connection.commit()
     connection.close()
     return True
