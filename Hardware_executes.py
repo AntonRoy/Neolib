@@ -1,14 +1,13 @@
-import pypyodbc
-import datetime
+import sqlite3
 import vkplus
+import settings
+
+vk = vkplus.VkPlus(settings.vk_login, settings.vk_password, settings.vk_app_id)
 
 def Book_of_ID(BookID):
     print('Trying to connect:')
     try:
-        connection = pypyodbc.connect('DRIVER={SQL Server};'
-                                      'SERVER=DESKTOP-T62E4DK\SQLEXPRESS;'
-                                      'DATABASE=TSL;'
-                                      'Trusted_connection=True')
+        connection = sqlite3.connect('TSL.db', timeout=10)
         print('Connected')
     except:
         print('Could not connect')
@@ -19,34 +18,58 @@ def Book_of_ID(BookID):
 
 
 def take_book(Student, Book):
+    global vk
     print('Trying to connect:')
     try:
-        connection = pypyodbc.connect('DRIVER={SQL Server};'
-                                      'SERVER=DESKTOP-T62E4DK\SQLEXPRESS;'
-                                      'DATABASE=TSL;'
-                                      'Trusted_connection=True')
+        connection = sqlite3.connect('TSL.db', timeout=10)
         print('Connected')
     except:
         print('Could not connect')
     cursor = connection.cursor()
-    request = cursor.execute(("INSERT INTO Main_Books_Tab (Student, Book, Date_Of_Receipt) VALUES ('{0}', '{1}', '{2}')").format(Student, Book, datetime.datetime.now())).fetchall()
+    request = cursor.execute(("INSERT INTO Books_Of_Snudent (Student, Book) VALUES ('{0}', '{1}')").format(Student, Book))
+    id_vk = cursor.execute("select ID_Vk from Main_Tab where ID = '{0}'".format(Student))
     connection.commit()
-    vkplus.VkPlus.send(Student, "Вы успешно взяли книгу")
+    vkplus.VkPlus.send(vk, user_id=id_vk, message='Вы успешно взяли книгу')
     connection.close()
+    return
 
 
 def return_book(Student, Book):
+    global vk
     print('Trying to connect:')
     try:
-        connection = pypyodbc.connect('DRIVER={SQL Server};'
-                                      'SERVER=DESKTOP-T62E4DK\SQLEXPRESS;'
-                                      'DATABASE=TSL;'
-                                      'Trusted_connection=True')
+        connection = sqlite3.connect('TSL.db', timeout=10)
         print('Connected')
     except:
         print('Could not connect')
     cursor = connection.cursor()
-    request = cursor.execute(("DELETE FROM Main_Books_Tab (Student, Book, Date_Of_Receipt) VALUES ('{0}', '{1}', '{2}')").format(Student, Book, datetime.datetime.now())).fetchall()
-    vkplus.VkPlusv .send(Student, 'Вы успешно сдали книгу')
-
+    request = cursor.execute(("DELETE FROM Books_Of_Snudent where Student = '{0}' and Book = '{1}'").format(Student, Book))
+    id_vk = cursor.execute("select ID_Vk from Main_Tab where ID = '{0}'".format(Student))
+    connection.commit()
+    vkplus.VkPlus.send(vk, user_id=id_vk, message='Вы успешно сдали книгу')
     connection.close()
+    return
+
+
+def login2id(login):
+    print('Trying to connect:')
+    try:
+        connection = sqlite3.connect('TSL.db', timeout=10)
+        print('Connected')
+    except:
+        print('Could not connect')
+    cursor = connection.cursor()
+    id = cursor.execute("select ID from Main_Tab where gym = '{0}'".format(login)).fetchall()[0][0]
+    return id
+
+
+def isbn2id(isbn):
+    print('Trying to connect:')
+    try:
+        connection = sqlite3.connect('TSL.db', timeout=10)
+        print('Connected')
+    except:
+        print('Could not connect')
+    cursor = connection.cursor()
+    id = cursor.execute("select ID from Books_Tab where ISBN = '{0}'".format(isbn)).fetchall()[0][0]
+    return id

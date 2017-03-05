@@ -2,6 +2,7 @@ from flask import *
 from flask_bootstrap import Bootstrap
 import os
 import executes_for_web
+import Hardware_executes
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
@@ -31,18 +32,27 @@ def login():
             numb_form = request.form['numb_form']
             print(numb_form)
             if numb_form == '0':
+                # если пользователь регистрируется
                 name_stud = request.form['name_stud']
                 surname_stud = request.form['surname_stud']
-                id_stud = request.form['id_stud']
+                stud = request.form['id_stud']
                 grade_stud = request.form['grade_numb'] + request.form['grade_letter']
-                print(name_stud, surname_stud, id_stud, grade_stud)
+                print(name_stud, surname_stud, stud, grade_stud)
             elif numb_form == '1':
-                book_id = request.form['book_id']
-                id_stud = request.form['id_stud']
-                print(id_stud, book_id)
+                # если пользователь забирает книгу
+                isbn = request.form['book_id']
+                stud = request.form['id_stud']
+                ids = Hardware_executes.login2id(stud)
+                idb = Hardware_executes.isbn2id(isbn)
+                print(ids, idb)
+                Hardware_executes.take_book(ids, idb)
             elif numb_form == '2':
-                book_id = request.form['book_id']
-                print(book_id)
+                # если пользователь возвращает книгу
+                stud = request.form['id_stud']
+                isbn = request.form['book_id']
+                ids = Hardware_executes.login2id(stud)
+                idb = Hardware_executes.isbn2id(isbn)
+                Hardware_executes.return_book(ids, idb)
     return render_template('about.html', error=error)
 
 
@@ -59,17 +69,21 @@ def main():
             types = request.form['type']
             if types:
                 uch = True
-                data = executes_for_web.Search_Of_Student(selectedStud.split(', ')[0], selectedStud.split(', ')[1])
+                print(list(map(lambda x: x[1:-1], selectedStud[1:-1].split(', '))))
+                data = executes_for_web.Search_Of_Student(list(map(lambda x: x[1:-1], selectedStud[1:-1].split(', '))))
+                stname = list(map(lambda x: x[1:-1], selectedStud[1:-1].split(', ')))
             else:
                 a_stud = ''
                 a_book = 'active'
                 div_stud = 'tab-pane fade in'
                 div_book = 'tab-pane active fade in'
                 uch = False
-                selectedStud = selectedStud.split(', ')
+                selectedStud = selectedStud[1:-1].split(', ')
+                print(selectedStud)
                 data = executes_for_web.Search_Of_Book(selectedStud[1], selectedStud[0])
-            print(selectedStud, types)
-            return render_template('found.html', stname=selectedStud, arrays=data, uch=uch)
+            print('выбранный: ', selectedStud, types)
+            print(1)
+            return render_template('found.html', stname=stname[0] + ' ' + stname[1], arrays=data, uch=uch)
         except:
             select = request.form["select"]
             print(select)
@@ -95,10 +109,13 @@ def main():
                     return render_template('found.html', stname=name + ' ' + surname, klass=grade, arrays=books)
                 else:
                     uch = None
-                    print('keks')
                     error = "Ничего не найдено"
-                    return render_template('found.html', stname=name + ' ' + surname, klass=grade, arrays=[],
-                                           error=error)
+                    a_stud = 'active'
+                    a_book = ''
+                    div_stud = 'tab-pane active fade in'
+                    div_book = 'tab-pane fade in'
+                    return render_template('newmain.html', stname=name + ' ' + surname, klass=grade, arrays=[],
+                                           error=error, a_book=a_book, a_stud=a_stud, div_book=div_book, div_stud=div_stud)
             elif select == 'По книге':
                 a_stud = ''
                 a_book = 'active'
@@ -107,28 +124,26 @@ def main():
                 title = request.form['title']
                 author = request.form['surname']
                 stname = title + ', ' + author
-                students = ['Достоевский, Преступление и наказание', "Ницше, Так говорил Заратустра",
-                            "Данте, Божественная Комедия"]
-                data = [
-                    ['Антон Ройтерштейн', "20.01.2017", '20.02.2017'],
-                    ['Денис Мазур', "1.02.2017", '1.03.2017']
-                ]
+                students = executes_for_web.mega_searchBook(Name_Of_Book=title, Author_Of_Book=author)
                 if len(stname) <= 2:
                     stname = "Имя не указано"
                     return render_template('newmain.html', stname=stname, arrays=None, uch=None,
                                            a_book=a_book, a_stud=a_stud, div_book=div_book, div_stud=div_stud, error='')
-                if len(students) > 1:
+                print('ученики: ', students)
+                if len(students[0]) > 1:
                     uch = False
                     return render_template('newmain.html', stname=stname, arrays=students, uch=uch,
                                            a_book=a_book, a_stud=a_stud, div_book=div_book, div_stud=div_stud, error='')
-                elif len(students) == 1:
+                elif len(students[0]) == 1:
                     uch = False
+                    print(students)
+                    data = executes_for_web.Search_Of_Book(students[0][0][0], students[0][0][1])
                     print(stname, data)
                     return render_template('found.html', stname=stname, arrays=data, uch=uch)
-                #elif len(students) < 1:
-                    #error = 'Ничего не нацдено'
-                    #return render_template('newmain.html', stname=stname, arrays=students, uch=140,
-                                           #a_book=a_book, a_stud=a_stud, div_book=div_book, div_stud=div_stud, error=error)
+                elif len(students[0]) < 1:
+                    error = 'Ничего не нацдено'
+                    return render_template('newmain.html', stname=stname, arrays=students, uch=140,
+                                           a_book=a_book, a_stud=a_stud, div_book=div_book, div_stud=div_stud, error=error)
 
     return render_template('newmain.html', stname=None, arrays=None, uch=None,
                            a_book=a_book, a_stud=a_stud, div_book=div_book, div_stud=div_stud, error="")
@@ -142,28 +157,43 @@ def logout():
 
 @app.route('/addbook', methods=['GET', 'POST'])
 def addbook():
+    variant = 0
     if request.method == 'POST':
-        code = request.form['scan']
-        cnt = request.form['col']
-        print(code, cnt)
-        try:
-            print(int(code))
-        except:
-            return render_template('add book.html', all_returned='', problem='ISBN должен состоять только из цифр')
-        if len(code) < 13 or len(code) > 13:
-            return render_template('add book.html', all_returned='', problem='ISBN должен состоять из 13 цифр')
-        elif len(cnt) < 1 or int(cnt) < 1:
-            return render_template('add book.html', all_returned='', problem='Количество книг не может быть меньше 1')
-        else:
-            add = executes_for_web.Add_Book(code, cnt)
-            if add:
-                return render_template('add book.html', all_returned='Добавлено!', problem='')
-            else:
+        variant = request.form['variant']
+        print(variant)
+        if variant == '0':
+            code = request.form['scan']
+            cnt = request.form['col']
+            print(code, cnt)
+            try:
+                print(int(code))
+            except:
+                return render_template('add book.html', all_returned='', problem='ISBN должен состоять только из цифр',
+                                       variant=variant)
+            if len(code) < 13 or len(code) > 13:
+                return render_template('add book.html', all_returned='', problem='ISBN должен состоять из 13 цифр',
+                                       variant=variant)
+            elif len(cnt) < 1 or int(cnt) < 1:
                 return render_template('add book.html', all_returned='',
-                                       problem='Такой книги в общей базе данных нет')
+                                       problem='Количество книг не может быть меньше 1', variant=variant)
+            else:
+                add = executes_for_web.Add_Book(code, cnt)
+                if add:
+                    return render_template('add book.html', all_returned='Добавлено!', problem='', variant=variant)
+                else:
+                    variant = 1
+                    return render_template('add book.html', all_returned='',
+                                           problem='Такой книги в общей базе данных нет', variant=variant)
+        elif variant == '1':
+            print("мы здесь")
+            name_book = request.form['name_book']
+            author_book = request.form['author_book']
+            scan = request.form['scan']
+            col = request.form['col']
+            print(name_book, author_book, scan, col)
+            return render_template('add book.html', all_returned='Добавлено!', problem='', variant='0')
 
-    return render_template('add book.html', all_returned='', problem='')
-
+    return render_template('add book.html', all_returned='', problem='', variant=variant)
 
 app.secret_key = os.urandom(24)
 

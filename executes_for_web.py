@@ -22,7 +22,7 @@ def reduce(lis):
 def mega_search(**kwargs):
     print('Trying to connect:')
     try:
-        connection = sqlite3.connect('TSL.db')
+        connection = sqlite3.connect('TSL.db', timeout=10)
         print('Connected')
     except:
         print('Could not connect')
@@ -30,22 +30,41 @@ def mega_search(**kwargs):
     sets = []
     if len(kwargs.items()) == 1:
         arg = list(kwargs.items())[0]
-        print('keks')
         return list(map(list, list([cursor.execute(("select First_Name, Last_Name from Main_Tab where {0} = '{1}'").format(arg[0], arg[1])).fetchall()])))
     for arg in kwargs.items():
         if arg[1] == '':
-            print(arg[0])
             continue
         sets.append(set(cursor.execute(("select First_Name, Last_Name from Main_Tab where {0} = '{1}'").format(arg[0], arg[1])).fetchall()))
-    print(sets)
     sets = sets if len(sets) <= 1 else [reduce(sets)]
     print(list(map(list, list(sets))))
     return list(map(list, list(sets)))
 
+
+def mega_searchBook(**kwargs):
+    print('Trying to connect:')
+    try:
+        connection = sqlite3.connect('TSL.db', timeout=10)
+        print('Connected')
+    except:
+        print('Could not connect')
+    cursor = connection.cursor()
+    sets = []
+    if len(kwargs.items()) == 1:
+        arg = list(kwargs.items())[0]
+        return list(map(list, list([cursor.execute(("select Name_Of_Book, Author_Of_Book from Books_Tab where {0} = '{1}'").format(arg[0], arg[1])).fetchall()])))
+    for arg in kwargs.items():
+        if arg[1] == '':
+            continue
+        sets.append(set(cursor.execute(("select Name_Of_Book, Author_Of_Book from Books_Tab where {0} = '{1}'").format(arg[0], arg[1])).fetchall()))
+    sets = sets if len(sets) <= 1 else [reduce(sets)]
+    print(list(map(list, list(sets))))
+    return list(map(list, list(sets)))
+
+
 def Add_Book(isbn, cnt):
     print('Trying to connect:')
     try:
-        connection = sqlite3.connect('TSL.db')
+        connection = sqlite3.connect('TSL.db', timeout=10)
         print('Connected')
     except:
         print('Could not connect')
@@ -61,7 +80,7 @@ def Add_Book(isbn, cnt):
         connection.commit()
         connection.close()
         return True
-    request2 = cursor.execute(("INSERT INTO Books_Tab (ISBN, Name_Of_Book, Author_Of_Book) VALUES ('{0}', '{1}', '{2}')").format(isbn, book_meta[1], book_meta[2].split())).fetchall()
+    request2 = cursor.execute(("INSERT INTO Books_Tab (ISBN, Name_Of_Book, Author_Of_Book) VALUES ('{0}', '{1}', '{2}')").format(isbn, book_meta[1], book_meta[2])).fetchall()
     connection.commit()
     connection.close()
     return True
@@ -69,17 +88,16 @@ def Add_Book(isbn, cnt):
 def Search_Of_Student(name):
     print('Trying to connect:')
     try:
-        connection = sqlite3.connect('TSL.db')
+        connection = sqlite3.connect('TSL.db', timeout=10)
         print('Connected')
     except:
         print('Could not connect')
-    id = ID_Of_Name(name)
+    id = ID_Of_Name((name[0], name[1]))
     cursor = connection.cursor()
     request = cursor.execute(("SELECT Book, Date_Of_Receipt, Date_Of_Return FROM Books_Of_Snudent WHERE Student = '{0}'").format(id)).fetchall()
     request = list(map(lambda x: list(x), request))
     for book in range(len(request)):
         book_name = cursor.execute(("SELECT Name_Of_Book FROM Books_Tab WHERE ID = '{0}'").format(request[book][0])).fetchall()
-        print(book_name[0][0], request[book][0])
         request[book][0] = book_name[0][0]
     connection.close()
     return request
@@ -89,7 +107,7 @@ def Search_Of_Student(name):
 def Search_Of_Book(Book, Author):
     print('Trying to connect:')
     try:
-        connection = sqlite3.connect('TSL.db')
+        connection = sqlite3.connect('TSL.db', timeout=10)
         print('Connected')
     except:
         print('Could not connect')
@@ -106,22 +124,22 @@ def Search_Of_Book(Book, Author):
 def ID_Of_Name(name):
     print('Trying to connect:')
     try:
-        connection = sqlite3.connect('TSL.db')
+        connection = sqlite3.connect('TSL.db', timeout=10)
         print('Connected')
     except:
         print('Could not connect')
-    #print(name)
     cursor = connection.cursor()
+    print(name[0], name[1])
     request = cursor.execute(("select ID from Main_Tab where First_Name = '{0}' and Last_Name = '{1}'").format(name[0], name[1])).fetchall()
     connection.close()
-
+    print(request)
     return request[0][0]
 
 
 def ID_Of_Book(Name, Author):
     print('Trying to connect:')
     try:
-        connection = sqlite3.connect('TSL.db')
+        connection = sqlite3.connect('TSL.db', timeout=10)
         print('Connected')
     except:
         print('Could not connect')
@@ -146,6 +164,7 @@ def heh(isb):
         book_name = book_name[book_name.find('>') + 1:book_name.find('</') - 1]
         book_author = str(book_author.prettify())
         book_author = book_author[book_author.find('>') + 1:book_author.find('>/') - 6]
+        print(book_name, book_author)
         return (True, translit(book_name[2:]), author(translit(book_author[2:-1])))
     except:
         return (False, None)

@@ -16,6 +16,19 @@ def Book_In_Library(Name_Of_Book1, Author_Of_Book1):
     return False
 
 
+def return_date():
+    print('Trying to connect:')
+    try:
+        connection = sqlite3.connect('TSL.db')
+        print('Connected')
+    except:
+        print('Could not connect')
+    cursor = connection.cursor()
+    data = cursor.execute("select ID_Vk, Date_Of_Return from Main_Tab")
+    return data
+
+
+
 def Books_Of_Author_In_Library(Author):
     print('Trying to connect:')
     try:
@@ -24,7 +37,7 @@ def Books_Of_Author_In_Library(Author):
     except:
         print('Could not connect')
     cursor = connection.cursor()
-    request = cursor.execute("select Name_Of_Book, In_Stock from Books_Tab where '{0}' IN ".format(Author)).fetchall()
+    request = cursor.execute("select Name_Of_Book, In_Stock from Books_Tab where Author_Of_Book = '{0}'".format(Author)).fetchall()
     connection.close()
     if request:
         return request
@@ -40,9 +53,10 @@ def list_of_debts(ID_In_Database):
         print('Could not connect')
     cursor = connection.cursor()
     request = cursor.execute("select Book from Books_Of_Snudent where Student = '{0}'".format(ID_In_Database[0][0])).fetchall()
+    print(request)
     debts = set()
     for debt in request:
-        debtf = cursor.execute("select * from Books_Tab where ID = {0}".format(debt[0])).fetchall()
+        debtf = cursor.execute("select * from Books_Tab where ID = '{0}'".format(debt[0])).fetchall()
         debts.add(debtf[0])
     print(list(debts))
     return list(debts)

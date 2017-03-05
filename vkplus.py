@@ -26,12 +26,8 @@ class VkPlus:
             values['user_id'] = to['user_id']
             self.api.method('messages.send', values)
 
-    def send(self, body, user):
-        values = {
-            'message':body,
-            'user_id':user
-        }
-        self.api.method('messages.send', values)
+    def send(self, **kwargs):
+        self.api.method('messages.send', kwargs)
 
 
     def markasread(self, id):
