@@ -16,8 +16,11 @@ class Plugin:
         return ret
 
     def call(self, msg):
-        workwith = 'а ты уверен'
-        author = msg['body'].split()[1]
+        author_s = msg['body'].split()[1:]
+        author= ''
+        for w in author_s:
+            author += w + ' '
+        author = author[:-1]
         books = executes_from_bot.Books_Of_Author_In_Library(author)
         try:
             cnt = 0
