@@ -13,26 +13,54 @@
         </div>
     </div>
 </nav>
-</br>
+<br>
 <div align="center" class="container">
     <h2>Добавление книги</h2>
     <h3 class="text-success">{{all_returned}}</h3>
     <h3 class="text-danger">{{problem}}</h3>
-<h4>Укажите штрих-код</h4>
+{% if variant == 0 %}
+    <h4>Укажите штрих-код</h4>
     <p>Введите штрих-код, указанный на книге, либо с помощью сканера, либо вручную.</p>
     <form  class="form-inline" method=post id="automathics">
         <div class="row">
+            <input type="hidden" name="variant" value="0">
             <div class="form-group">
-                <input class="form-control input-xs-5" placeholder="штрих-код" type="text" name="scan">
+                <input class="form-control input-sm-5" placeholder="штрих-код" type="text" name="scan">
             </div>
             <div class="form-group">
-                <input class="form-control input-xs-2" name="col" type="number" placeholder="всего"><br>
+                <input class="form-control input-sm-2" name="col" type="number" placeholder="всего"><br>
             </div>
             <div class="form-group">
                 <input class="btn btn-success" value="Отправить" type="submit" name='auto'>
             </div>
         </div>
     </form>
-
+    {% elif variant == 1 %}
+    <h3 class="text-success">Попробуйте добавить книгу вручную</h3>
+    <form method="post">
+        <input type="hidden" value="1" name="variant">
+        <div class="container">
+            <div class="form-inline">
+                <div class="form-group">
+                    <input class="form-control input-md-6" name="name_book" type="text" placeholder="Название">
+                </div>
+                <div class="form-group">
+                    <input class="form-control input-md-6" name="author_book" type="text" placeholder="Автор">
+                </div>
+            </div>
+            <br>
+            <div class="form-inline">
+                <div class="form-group">
+                    <input class="form-control input-md-6" name="scan" type="number" placeholder="штрих-код">
+                </div>
+                <div class="form-group">
+                    <input class="form-control input-md-6" name="col" type="number" placeholder="количество">
+                </div>
+            </div>
+            <br>
+                <input class="btn btn-success" value="Отправить" type="submit" name='auto'>
+        </div>
+    </form>
+{% endif %}
 </div>
 {%endblock%}
