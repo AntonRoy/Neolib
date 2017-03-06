@@ -3,6 +3,8 @@
 import os
 import sys
 import time
+import executes_from_bot
+from rotten import Potato
 
 from vkplus import VkPlus
 
@@ -22,6 +24,7 @@ def main():
     print('Авторизация...')
 
     vk = VkPlus(settings.vk_login, settings.vk_password, settings.vk_app_id)
+    mister = Potato(vk)
 
     print('---------------------------')
 
@@ -44,7 +47,7 @@ def main():
     print('Приступаю к приему сообщений')
 
     while True:
-
+        mister.run();
         values = {
             'out': 0,
             'offset': 0,
