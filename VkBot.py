@@ -3,10 +3,8 @@
 import os
 import sys
 import time
-import executes_from_bot
-from rotten import Potato
 
-from vkplus import VkPlus
+import vkplus as vkb
 
 import settings
 
@@ -23,8 +21,7 @@ def main():
 
     print('Авторизация...')
 
-    vk = VkPlus(settings.vk_login, settings.vk_password, settings.vk_app_id)
-    mister = Potato(vk)
+    vk = vkb.VkPlus(settings.vk_login, settings.vk_password, settings.vk_app_id)
 
     print('---------------------------')
 
@@ -47,7 +44,7 @@ def main():
     print('Приступаю к приему сообщений')
 
     while True:
-        mister.run();
+
         values = {
             'out': 0,
             'offset': 0,
@@ -70,7 +67,6 @@ def main():
 
 
 def command(message, cmds):
-    key_words_greeting = ['прив', 'драту', 'здравст', 'здорово']
     if message['body'] == u'':
         return
     words = message['body'].split()

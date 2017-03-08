@@ -2,9 +2,21 @@ import sqlite3
 import vkplus
 import settings
 
+
 vk = vkplus.VkPlus(settings.vk_login, settings.vk_password, settings.vk_app_id)
 
-#def registration(First_Name, Last_Name, ID_Vk, gym, )
+def registration(First_Name, Last_Name, ID_Vk, Sex, gym, grade):
+    print('Trying to connect:')
+    try:
+        connection = sqlite3.connect('TSL.db', timeout=10)
+        print('Connected')
+    except:
+        print('Could not connect')
+    cursor = connection.cursor()
+    cursor.execute("INSERT INTO Main_Tab (First_Name, Last_Name, ID_Vk, Sex, gym, Grade) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')".format(First_Name, Last_Name, ID_Vk, Sex, gym, grade))
+    connection.commit()
+    connection.close()
+
 
 
 def take_book(Student, Book):

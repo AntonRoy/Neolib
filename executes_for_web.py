@@ -76,7 +76,7 @@ def Add_Book(isbn, cnt):
         connection.commit()
         connection.close()
         return True
-    book_meta = heh(isbn)
+    book_meta = list(heh(isbn))
     if not book_meta[0]:
         connection.commit()
         connection.close()
@@ -253,6 +253,12 @@ def translit(s):
             s[i + 1] = 'й'
         elif s[i] == 'и' and s[i + 1] == 'ы':
             s[i + 1] = 'й'
+        elif s[i] == 'ш' and s[i + 1] == 'ч':
+            s[i] = 'щ'
+            s[i + 1] = ''
+        elif s[i] == 'ы' and s[i + 1] == 'у':
+            s[i] = 'ю'
+            s[i + 1] = ''
         elif s[i] == 'х' and s[i] == s[i + 1]:
             s[i] = ''
         elif s[i] == '.':

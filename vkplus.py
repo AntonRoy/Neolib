@@ -1,15 +1,20 @@
 import vk_api
 
 
+def captcha_handler(captcha):
+    key = input("Enter Captcha {0}: ".format(captcha.get_url())).strip()
+    return captcha.try_again(key)
+
 class VkPlus:
     api = None
+
 
     def __init__(self, login, password, app_id=-1):
         try:
             if app_id == -1:
-                self.api = vk_api.VkApi(login, password)  
+                self.api = vk_api.VkApi(login, password, captcha_handler=captcha_handler)
             else:
-                self.api = vk_api.VkApi(login, password, app_id)  
+                self.api = vk_api.VkApi(login, password, app_id, captcha_handler=captcha_handler)
 
             self.api.authorization()
         except vk_api.AuthorizationError as error_msg:

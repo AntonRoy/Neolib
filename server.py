@@ -29,15 +29,19 @@ def login():
             else:
                 error = " Неверный логин/пароль"
         except:
+            result='Успешно!'
             numb_form = request.form['numb_form']
             print(numb_form)
             if numb_form == '0':
                 # если пользователь регистрируется
+                id_vk = request.form['vk_id']
+                gender = request.form['gender']
                 name_stud = request.form['name_stud']
                 surname_stud = request.form['surname_stud']
                 stud = request.form['id_stud']
                 grade_stud = request.form['grade_numb'] + request.form['grade_letter']
-                print(name_stud, surname_stud, stud, grade_stud)
+                Hardware_executes.registration(name_stud, surname_stud, id_vk, gender, stud, grade_stud)
+
             elif numb_form == '1':
                 # если пользователь забирает книгу
                 isbn = request.form['book_id']
@@ -53,7 +57,8 @@ def login():
                 ids = Hardware_executes.login2id(stud)
                 idb = Hardware_executes.isbn2id(isbn)
                 Hardware_executes.return_book(ids, idb)
-    return render_template('about.html', error=error)
+            return render_template('about.html', error='', result=result)
+    return render_template('about.html', error=error, result='')
 
 
 @app.route('/main', methods=['GET', 'POST'])
