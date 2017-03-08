@@ -18,7 +18,7 @@ class Plugin:
 
     def call(self, msg):
         lists = ''
-        path = 'plugins/'
+        path = 'Plugins/'
         sys.path.insert(0, path)
         for f in os.listdir(path):
             fname, ext = os.path.splitext(f)
