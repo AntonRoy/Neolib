@@ -1,22 +1,19 @@
+# coding: utf8
+
 import urllib
 import json
 
 
 def correct(string):
-    words = string.split(' ')
-    blank = ''
+    s = string.strip().replace(' ', '+')
+    blank = urllib.urlopen('http://speller.yandex.net/services/spellservice.json/checkText?text=%20' + s)
+    blank = blank.read()
+    blank = json.loads(blank)
 
-    for word in words:
-        blank += word+'+'
-
-    blank = 'http://speller.yandex.net/services/spellservice.json/checkText?text=%20' + blank[:-1]
-    result = urllib.urlopen(blank).read()
-    result = json.loads(result)
-
-    for word in result:
-        if len(word['s']) > 0 :
-            string = string.replace(word[u'word'], word[u's'][0])
+    for word in blank:
+        string = string.decode('utf-8').replace(word[u'word'], word[u's'][0]).encode('utf-8')
 
     return string
 
-print correct('hellomyname')
+
+print correct('Пушкен Олександр')
