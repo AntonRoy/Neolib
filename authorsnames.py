@@ -30,4 +30,4 @@ class Plugin:
                 self.vk.respond(msg, {'message': str(cnt) + ')' + book[0] + ',' + ' доступно ' + str(book[1])})
         except:
             self.vk.respond(msg, {'message': 'Кажется, что-то пошло не так...'})
-            self.vk.respond(msg, {'message': 'Может ты имел ввиду ' + cr.correct(msg['body'].split()[1:])})
+            self.vk.respond(msg, {'message': 'Может ты имел ввиду ' + cr.correct(msg['body'][1:])})
