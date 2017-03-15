@@ -8,7 +8,7 @@ def Book_In_Library(Name_Of_Book1, Author_Of_Book1):
     except:
         print('Could not connect')
     cursor = connection.cursor()
-    request = cursor.execute(("select *from Books_Tab where Name_Of_Book = '{0}' and Author_Of_Book = '{1}' and Books_Tab.In_Stock > 0").format(Name_Of_Book1, Author_Of_Book1)).fetchall()
+    request = cursor.execute(("select *from Books_Tab where Name_Of_Book like '%{0}%' and Author_Of_Book like '%{1}%' and Books_Tab.In_Stock > 0").format(Name_Of_Book1, Author_Of_Book1)).fetchall()
     connection.close()
     print(request)
     if request:
@@ -37,7 +37,7 @@ def Books_Of_Author_In_Library(Author):
     except:
         print('Could not connect')
     cursor = connection.cursor()
-    request = cursor.execute("select Name_Of_Book, In_Stock from Books_Tab where Author_Of_Book = '{0}'".format(Author)).fetchall()
+    request = cursor.execute("select Name_Of_Book, In_Stock from Books_Tab where Author_Of_Book like '%{0}%'".format(Author)).fetchall()
     connection.close()
     if request:
         return request
@@ -97,7 +97,7 @@ def Books_Of_Genre_In_Library(Genre):
     except:
         print('Could not connect')
     cursor = connection.cursor()
-    request = cursor.execute("select Name_Of_Book, Author_Of_Book, In_Stock from Books_Tab where Genre = '{0}'".format(Genre)).fetchall()
+    request = cursor.execute("select Name_Of_Book, Author_Of_Book, In_Stock from Books_Tab where Genre like '%{0}%'".format(Genre)).fetchall()
     connection.close()
     if request:
         return request

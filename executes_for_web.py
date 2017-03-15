@@ -36,7 +36,6 @@ def mega_search(**kwargs):
             continue
         sets.append(set(cursor.execute(("select First_Name, Last_Name from Main_Tab where {0} = '{1}'").format(arg[0], arg[1])).fetchall()))
     sets = sets if len(sets) <= 1 else [reduce(sets)]
-    print(list(map(list, list(sets))))
     return list(map(list, list(sets)))
 
 
@@ -57,8 +56,21 @@ def mega_searchBook(**kwargs):
             continue
         sets.append(set(cursor.execute(("select Name_Of_Book, Author_Of_Book from Books_Tab where {0} = '{1}'").format(arg[0], arg[1])).fetchall()))
     sets = sets if len(sets) <= 1 else [reduce(sets)]
-    print(list(map(list, list(sets))))
     return list(map(list, list(sets)))
+
+
+def add_book_f(isbn, Name, Auth, cnt):
+    print('Trying to connect:')
+    try:
+        connection = sqlite3.connect('TSL.db', timeout=10)
+        print('Connected')
+    except:
+        print('Could not connect')
+    cursor = connection.cursor()
+    cursor.execute(("INSERT INTO Books_Tab (ISBN, Name_Of_Book, Author_Of_Book, In_Stock, All_Books) VALUES ('{0}', '{1}', '{2}', '{3}', '{3}')").format(isbn, Name.lower(), Auth.lower(), cnt))
+    connection.commit()
+    connection.close()
+    return True
 
 
 def Add_Book(isbn, cnt):
@@ -81,7 +93,7 @@ def Add_Book(isbn, cnt):
         connection.commit()
         connection.close()
         return False
-    request2 = cursor.execute(("INSERT INTO Books_Tab (ISBN, Name_Of_Book, Author_Of_Book, In_Stock, All_Books) VALUES ('{0}', '{1}', '{2}', '{3}', '{3}')").format(isbn, book_meta[1], book_meta[2], cnt)).fetchall()
+    request2 = cursor.execute(("INSERT INTO Books_Tab (ISBN, Name_Of_Book, Author_Of_Book, In_Stock, All_Books) VALUES ('{0}', '{1}', '{2}', '{3}', '{3}')").format(isbn, book_meta[1].lower(), book_meta[2].lower(), cnt)).fetchall()
     connection.commit()
     connection.close()
     return True
