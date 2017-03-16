@@ -143,8 +143,8 @@ def select_tab(tab):
         print('Could not connect')
     cursor = connection.cursor()
     if tab:
-        return cursor.execute("select * from Books_Tab").fetchall()
-    return cursor.execute("select * from Main_Tab").fetchall()
+        return list(map(lambda x: x[:-1], cursor.execute("select * from Books_Tab").fetchall()))
+    return list(map(lambda x: x[:-2], cursor.execute("select * from Main_Tab").fetchall()))
     connection.close()
 
 
