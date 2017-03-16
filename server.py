@@ -100,14 +100,14 @@ def main():
                     gender = 1 if request.form['gender'] == 'boy' else 0
                 except:
                     gender = ''
-                if grade in "--":
+                if grade == "--":
                     grade = ''
                 else:
                     grade = int(grade)
                 puple = executes_for_web.mega_search(Sex=gender, Grade=grade, First_Name=name, Last_Name=surname)
                 if len(puple[0]) > 1:
                     return render_template('newmain.html', stname=name + ' ' + surname, klass=grade, arrays=puple,
-                                           uch=True,a_book=a_book, a_stud=a_stud, div_book=div_book, div_stud=div_stud,
+                                           uch=True, a_book=a_book, a_stud=a_stud, div_book=div_book, div_stud=div_stud,
                                            error='')
                 elif len(puple) == 1 and puple[0]:
                     books = executes_for_web.Search_Of_Student(puple[0][0])
@@ -199,6 +199,24 @@ def addbook():
             return render_template('add book.html', all_returned='Добавлено!', problem='', variant='0')
 
     return render_template('add book.html', all_returned='', problem='', variant=variant)
+
+
+@app.route('/get_students', methods=['GET', 'POST'])
+def get_students():
+    stud = executes_for_web.select_tab(0)
+    return render_template('stud.html', stud=stud)
+
+
+def title(string):
+    return ' '.join(list(map(lambda x: x[0].upper() + x[1:], string.split())))
+
+
+@app.route('/get_books', methods=['GET', 'POST'])
+def get_books():
+    books = list(map(lambda x: [x[0], x[1], x[2], title(x[3]), title(x[4])],
+                      list(map(list, executes_for_web.select_tab(1)))))
+
+    return render_template('book.html', books=books)
 
 app.secret_key = os.urandom(24)
 

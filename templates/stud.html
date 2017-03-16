@@ -1,0 +1,50 @@
+{%extends "layer.html"%}
+{% block body %}
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <span class="navbar-brand">Электронная система управления библиотекой</span>
+        </div>
+        <div>
+            <ul class="nav navbar-nav">
+                <li><a href="{{ url_for('get_books')}}">Книги</a></li>
+                <li><a href="{{ url_for('main') }}" >Поиск задолжностей</a></li>
+                <li><a href="{{ url_for('logout') }}">Выйти</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<br>
+<div class="container" align="center">
+    <h1 class="text-info">Ученики</h1>
+    <br>
+     <div class="table-responsive">
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr class="text-priority">
+                <th>N</th>
+                <th>Пол</th>
+                <th>Класс</th>
+                <th>Имя</th>
+                <th>Фамилия</th>
+            </tr>
+           </thead>
+            <tbody>
+            {%for i in stud%}
+            <tr>
+                <th>{{i[0]}}</th>
+                {% if i[1] == 1 %}
+                <th>Мужской</th>
+                {% else %}
+                <th>Женский</th>
+                {% endif %}
+                <th>{{i[2]}}</th>
+                <th>{{i[3]}}</th>
+                <th>{{i[4]}}</th>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{%endblock%}

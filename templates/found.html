@@ -10,7 +10,10 @@
             <ul class="nav navbar-nav">
                 <li><a class="text-info" style="color:steelblue;" href={{url_for('main')}} >&laquo; Назад</a></li>
                 <li><a href="{{ url_for('addbook') }}" >Добавить книгу</a></li>
+                <li><a href="{{ url_for('get_students')}}">Ученики</a></li>
+                <li><a href="{{ url_for('get_books')}}">Книги</a></li>
                 <li><a href="{{ url_for('logout') }}">Выйти</a></li>
+
             </ul>
         </div>
     </div>
@@ -41,7 +44,6 @@
         </table>
     </div>
     <br>
-    <form method="post" ><button class="btn btn-warning" value=True name="Change" onclick=this.value='False'; >Изменить данные</button></form>
     {%else%}
     <div class="table-responsive">
     <table class="table table-hover table-bordered">
@@ -56,7 +58,6 @@
     </table>
 </div>
     <br/>
-<form method="post"><button class="btn btn-warning" value=True name="Change" onclick=this.value='False'; >Изменить данные</button></form>
     {%endif%}
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
