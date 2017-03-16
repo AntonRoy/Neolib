@@ -40,7 +40,7 @@
                 {% endif %}
                 <th>{{i[2]}}</th>
                 <th>{{i[3]}}</th>
-                <th>{{i[4]}}</th>
+                <th>{{i[4]}} <a href="{{ url_for('student', name=i[3]+ '_' +i[4])}}">Перейти &raquo;</a></th>
             </tr>
             {% endfor %}
             </tbody>

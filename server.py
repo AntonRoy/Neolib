@@ -204,6 +204,7 @@ def addbook():
 @app.route('/get_students', methods=['GET', 'POST'])
 def get_students():
     stud = executes_for_web.select_tab(0)
+
     return render_template('stud.html', stud=stud)
 
 
@@ -217,6 +218,21 @@ def get_books():
                       list(map(list, executes_for_web.select_tab(1)))))
 
     return render_template('book.html', books=books)
+
+
+@app.route('/student/<name>', methods=['GET', 'POST'])
+def student(name):
+    name = tuple(name.split('_'))
+    data = executes_for_web.Search_Of_Student(name)
+    return render_template('found.html', uch=True, arrays=data, stname=name[0] + ' ' + name[1])
+
+
+@app.route('/book/<name>', methods=['GET', 'POST'])
+def book(name):
+    name = tuple(name.split('_'))
+    data = executes_for_web.Search_Of_Book(name[0].lower(), name[1].lower())
+    return render_template('found.html', uch=False, arrays=data, stname=name[0] + ', \n' + name[1])
+
 
 app.secret_key = os.urandom(24)
 
