@@ -134,6 +134,20 @@ def Search_Of_Book(Book, Author):
     connection.close()
     return request
 
+def select_tab(tab):
+    print('Trying to connect:')
+    try:
+        connection = sqlite3.connect('TSL.db', timeout=10)
+        print('Connected')
+    except:
+        print('Could not connect')
+    cursor = connection.cursor()
+    if tab:
+        return cursor.execute("select * from Books_Tab").fetchall()
+    return cursor.execute("select * from Main_Tab").fetchall()
+    connection.close()
+
+
 def ID_Of_Name(name):
     print('Trying to connect:')
     try:
