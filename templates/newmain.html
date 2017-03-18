@@ -28,7 +28,7 @@
 
 
     <div role="tabpanel" class="{{div_stud}}" id="student">
-    <h2 align="center">Поиск задолжностей</h2>
+    <h2 align="center">Поиск задолженностей</h2>
     <form class="form-inline" method='post' id="name">
         <input type="hidden" value="По ученику" name="select">
         <div class="form-group">
@@ -90,7 +90,7 @@
 
 
     <div role="tabpanel" class="{{div_book}}" id="book">
-        <h2 align="center">Поиск задолжностей</h2>
+        <h2 align="center">Поиск задолженностей</h2>
     <form class="form-inline" method='post' >
         <input type="hidden" value="По книге" name="select">
         <div class="form-group">
@@ -130,18 +130,6 @@
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
     integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<!--<script>
-$["#astud"].find(a).click(function(){
-$["#book"].removeClass("active");
-$(this).addClass("active");
-$["#student"].addClass("active");
-});
-$["#abook"].find(a).click(function(){
-$["#student"].removeClass("active");
-$(this).addClass("active");
-$["#book"].addClass("active");
-});
-</script>-->
 
 
 {%endblock%}

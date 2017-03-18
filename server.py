@@ -120,7 +120,8 @@ def main():
                     div_stud = 'tab-pane active fade in'
                     div_book = 'tab-pane fade in'
                     return render_template('newmain.html', stname=name + ' ' + surname, klass=grade, arrays=[],
-                                           error=error, a_book=a_book, a_stud=a_stud, div_book=div_book, div_stud=div_stud)
+                                           error=error, a_book=a_book, a_stud=a_stud, div_book=div_book,
+                                           div_stud=div_stud)
             elif select == 'По книге':
                 a_stud = ''
                 a_book = 'active'
@@ -147,8 +148,8 @@ def main():
                     return render_template('found.html', stname=stname, arrays=data, uch=uch)
                 elif len(students[0]) < 1:
                     error = 'Ничего не нацдено'
-                    return render_template('newmain.html', stname=stname, arrays=students, uch=140,
-                                           a_book=a_book, a_stud=a_stud, div_book=div_book, div_stud=div_stud, error=error)
+                    return render_template('newmain.html', stname=stname, arrays=students, uch=140, a_book=a_book,
+                                           a_stud=a_stud, div_book=div_book, div_stud=div_stud, error=error)
 
     return render_template('newmain.html', stname=None, arrays=None, uch=None,
                            a_book=a_book, a_stud=a_stud, div_book=div_book, div_stud=div_stud, error="")
@@ -231,7 +232,7 @@ def student(name):
 def book(name):
     name = tuple(name.split('_'))
     data = executes_for_web.Search_Of_Book(name[0].lower(), name[1].lower())
-    return render_template('found.html', uch=False, arrays=data, stname=name[0] + ', \n' + name[1])
+    return render_template('found.html', uch=False, arrays=data, stname=name[0] + ', ' + name[1])
 
 
 app.secret_key = os.urandom(24)
