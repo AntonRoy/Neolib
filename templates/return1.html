@@ -1,0 +1,33 @@
+{%extends "layer.html"%}
+{% block body %}
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <span class="navbar-brand">Электронная система управления библиотекой</span>
+        </div>
+        <div>
+            <ul class="nav navbar-nav">
+                <li><a href="{{url_for('take_books', id=id) }}">Взять книгу</a></li>
+                <li class="active"><a href="{{url_for('return_books', id=id) }}">Сдать книгу</a></li>
+                <li><a href="{{ url_for('logout') }}">Выйти</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<br>
+<div class="container" align="center">
+    <h1>Итак, Вы хотите сдать книгу</h1>
+    <p>Просканируйте штрих-код на книге, которую вы хотите сдать, с помощью сканера.</p>
+    <h2 class="text-warning">{{returned}}</h2>
+    <div class="row">
+        <form method="post" class="form-inline">
+            <div class="form-group ">
+                <input type="number" class="form-control input-md" name="isbn" placeholder="Штрих-код">
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-md btn-success" value="Сдать!">
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

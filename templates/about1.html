@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <title>Neo-lib</title>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+<div class="navbar navbar-fixed navbar-inverse">
+    <div class="container">
+        <div class="navbar-header">
+            <span class="navbar-brand">Электронная система управления библиотекой</span>
+        </div>
+        <form class="navbar-form navbar-right" method="post">
+      <div class="form-group">
+          <label for="password"> Просканируйте вашу карточку</label>
+       <input type="password" class="form-control input-md" name = 'login'  id='password' placeholder="Ваша карта">
+      </div>
+
+     <input class="btn btn-success btn-md" type = 'submit'  value="Войти">
+        </form>
+    </div>
+</div>
+{% if error %}<h3 class="text-danger text-right"><strong>Ошибка:</strong>{{ error }} &nbsp; &nbsp;&nbsp; &nbsp;</h3> {% endif %}
+<div class="jumbotron">
+    <div class="container">
+        <h2>Школьная Библиотека</h2>
+        <p>Это web-приложение создано для выдачи и сдачи книг ученику </p>
+        <a href="{{url_for('signup')}}" class="btn btn-lg btn-success">Регистрация</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 div">
+        <h1>Удобная сдача  и выдача книг</h1>
+        <p>Для того, чтобы сдать или забрать книгу, Вам надо просто просканировать штрих-код на ней. </p>
+    </div>
+    <div class="col-md-4 div">
+        <h1>Бот во "Вконтакте"</h1>
+        <p>Бот в социальной сети "Вконтакте" будет извещать Вас о успешной сдаче и выдаче книг, о Ваших сроках.
+            Вы можете узнавать у него о том, какие книги есть в наличии в библиотеке, а также резервировать с его
+            помощью книги</p>
+    </div>
+    <div class="col-md-4 div">
+        <h1>Приложите карту, чтобы войти</h1>
+        <p>Вам не нужно вспоминать пароли, чтобы войти. Просто приложите к NFC-сканеру Вашу школьную карту,
+            чтобы войти в приложение</p>
+    </div>
+
+</div>
+<footer>
+    <hr>
+  &nbsp;&nbsp;&nbsp;&nbsp;<a href="https://vk.com/adventurouscommunity" style="color: gold">by Adventurous Community</a>
+    <br>
+</footer>
+</body>

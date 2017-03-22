@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <title>Neo-lib</title>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+<div class="navbar navbar-fixed navbar-inverse">
+    <div class="container">
+        <div class="navbar-header">
+            <span class="navbar-brand">Электронная система управления библиотекой</span>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a  href="{{url_for('login')}}">Войти</a></li>
+        </ul>
+    </div>
+</div>
+<br>
+<div class="container" align="center" style="padding: 0px 200px">
+    <h1 class="text-info">Регистрация</h1>
+    <form method="post">
+        <input type="hidden" value="0" name="numb_form" align="left">
+        <div class="form-group">
+            <label for="id"> <b class="text-danger">&nbsp;Просканируйте вашу карточку*</b></label>
+            <input type="password" class="form-control input-md" id="id" name="id_stud" placeholder="123456">
+        </div>
+        <div class="form-group" align="left">
+            <label for="id_vk">&nbsp;&nbsp;Введите id вашего аккаунта Вконтакте</label>
+            <input type="number" class="form-control input-md" name="vk_id" id="id_vk" placeholder="ваш id во Вконтакте">
+        </div>
+        <div class="form-group" align="left">
+            <label for="a"> <b class="text-danger">Фамилия*</b> </label>
+            <input type="text" class="form-control input-md"  id ='a' name="name_stud" placeholder="Ваше полное имя">
+        </div>
+        <div class="form-group" align="left">
+            <label for="b"> <b class="text-danger" align="left">Имя*</b></label>
+            <input type="text" class="form-control input-md" id="b" name="surname_stud" placeholder="Ваша Фамилия">
+        </div alig>
+        <b><b class="text-danger">Класс*</b></b>
+        <select name="grade_numb">
+            {%for i in range(5, 12)%}
+            <option>{{i}}</option>
+            {%endfor%}
+        </select>
+        <select name="grade_letter">
+            <option>A</option>
+            <option>Б</option>
+            <option>В</option>
+        </select>
+        <b></b><b class="text-danger">Пол*</b>
+        <input type="radio" value="boy" name="gender">Мужской
+        <input type="radio" value="girl" name="gender">Женский
+        <input class="btn btn-success btn-md" type = 'submit'  value="Отправить!">
+    </form>
+</div>
+</body>
+</html>

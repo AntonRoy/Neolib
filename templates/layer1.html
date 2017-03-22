@@ -1,0 +1,15 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <title>Neo-lib</title>
+    <meta charset="UTF-8">
+    	 {%if not session.logged_in %}
+    <meta http-equiv="refresh" content="1;URL={{ url_for('login') }}" />
+  {% endif %}
+</head>
+{%block body%}{%endblock%}
+</html>
