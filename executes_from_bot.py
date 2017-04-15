@@ -8,11 +8,10 @@ def Book_In_Library(Name_Of_Book1, Author_Of_Book1):
     except:
         print('Could not connect')
     cursor = connection.cursor()
-    request = cursor.execute(("select *from Books_Tab where Name_Of_Book like '%{0}%' and Author_Of_Book like '%{1}%' and Books_Tab.In_Stock > 0").format(Name_Of_Book1, Author_Of_Book1)).fetchall()
+    request = cursor.execute(("select * from Books_Tab where Name_Of_Book like '%{0}%' and Author_Of_Book like '%{1}%' and Books_Tab.In_Stock > 0").format(Name_Of_Book1, Author_Of_Book1)).fetchall()
     connection.close()
-    print(request)
     if request:
-        return True
+        return (True, request[0][3][0].upper() + request[0][3][1:], request[0][4].title())
     return False
 
 

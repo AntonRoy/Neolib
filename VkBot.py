@@ -3,9 +3,7 @@
 import os
 import sys
 import time
-
 import vkplus as vkb
-
 import settings
 
 
@@ -69,7 +67,7 @@ def main():
 def command(message, cmds):
     if message['body'] == u'':
         return
-    words = message['body'].split()
+    words = message['body'].lower().split()
     if words[0][0] == '/':
         if len(words) >= 1 and words[0][1:] in cmds:
             cmds[words[0][1:].lower()].call(message)

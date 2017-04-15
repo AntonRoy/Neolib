@@ -30,11 +30,11 @@ def mega_search(**kwargs):
     sets = []
     if len(kwargs.items()) == 1:
         arg = list(kwargs.items())[0]
-        return list(map(list, list([cursor.execute(("select First_Name, Last_Name from Main_Tab where {0} = '{1}'").format(arg[0], arg[1])).fetchall()])))
+        return list(map(list, list([cursor.execute(("select First_Name, Last_Name from Main_Tab where {0} LIKE '%{1}%'").format(arg[0], arg[1])).fetchall()])))
     for arg in kwargs.items():
         if arg[1] == '':
             continue
-        sets.append(set(cursor.execute(("select First_Name, Last_Name from Main_Tab where {0} = '{1}'").format(arg[0], arg[1])).fetchall()))
+        sets.append(set(cursor.execute(("select First_Name, Last_Name from Main_Tab where {0} LIKE '%{1}%'").format(arg[0], arg[1])).fetchall()))
     sets = sets if len(sets) <= 1 else [reduce(sets)]
     return list(map(list, list(sets)))
 
@@ -50,16 +50,16 @@ def mega_searchBook(**kwargs):
     sets = []
     if len(kwargs.items()) == 1:
         arg = list(kwargs.items())[0]
-        return list(map(list, list([cursor.execute(("select Name_Of_Book, Author_Of_Book from Books_Tab where {0} = '{1}'").format(arg[0], arg[1])).fetchall()])))
+        return list(map(list, list([cursor.execute(("select Name_Of_Book, Author_Of_Book from Books_Tab where {0} LIKE '%{1}%'").format(arg[0], arg[1])).fetchall()])))
     for arg in kwargs.items():
         if arg[1] == '':
             continue
-        sets.append(set(cursor.execute(("select Name_Of_Book, Author_Of_Book from Books_Tab where {0} = '{1}'").format(arg[0], arg[1])).fetchall()))
+        sets.append(set(cursor.execute(("select Name_Of_Book, Author_Of_Book from Books_Tab where {0} LIKE '%{1}%'").format(arg[0], arg[1])).fetchall()))
     sets = sets if len(sets) <= 1 else [reduce(sets)]
     return list(map(list, list(sets)))
 
 
-def add_book_f(isbn, Name, Auth, cnt):
+def add_book_f(Name, Auth, isbn, cnt):
     print('Trying to connect:')
     try:
         connection = sqlite3.connect('TSL.db', timeout=10)
@@ -70,7 +70,7 @@ def add_book_f(isbn, Name, Auth, cnt):
     cursor.execute(("INSERT INTO Books_Tab (ISBN, Name_Of_Book, Author_Of_Book, In_Stock, All_Books) VALUES ('{0}', '{1}', '{2}', '{3}', '{3}')").format(isbn, Name.lower(), Auth.lower(), cnt))
     connection.commit()
     connection.close()
-    return True
+    return [True, Name, Auth]
 
 
 def Add_Book(isbn, cnt):
@@ -85,18 +85,20 @@ def Add_Book(isbn, cnt):
     if request1:
         cursor.execute(("update Books_Tab set In_Stock = In_Stock + {1} where ISBN = '{0}'").format(isbn, cnt))
         cursor.execute(("update Books_Tab set All_Books = All_Books + {1} where ISBN = '{0}'").format(isbn, cnt))
+        name = request1[0][3]
+        auth = request1[0][4]
         connection.commit()
         connection.close()
-        return True
+        return (True, name, auth)
     book_meta = list(heh(isbn))
     if not book_meta[0]:
         connection.commit()
         connection.close()
-        return False
+        return (False, False, False)
     request2 = cursor.execute(("INSERT INTO Books_Tab (ISBN, Name_Of_Book, Author_Of_Book, In_Stock, All_Books) VALUES ('{0}', '{1}', '{2}', '{3}', '{3}')").format(isbn, book_meta[1].lower(), book_meta[2].lower(), cnt)).fetchall()
     connection.commit()
     connection.close()
-    return True
+    return book_meta
 
 def Search_Of_Student(name):
     print('Trying to connect:')
@@ -156,10 +158,11 @@ def ID_Of_Name(name):
     except:
         print('Could not connect')
     cursor = connection.cursor()
-    print(name[0], name[1])
-    request = cursor.execute(("select ID from Main_Tab where First_Name = '{0}' and Last_Name = '{1}'").format(name[0], name[1])).fetchall()
+    name = list(name)
+    name[0] = name[0].lower().title()
+    name[1] = name[1].lower().title()
+    request = cursor.execute(("select ID from Main_Tab where First_Name LIKE '%{0}%' and Last_Name LIKE '%{1}%'").format(name[0], name[1])).fetchall()
     connection.close()
-    print(request)
     return request[0][0]
 
 
@@ -171,7 +174,9 @@ def ID_Of_Book(Name, Author):
     except:
         print('Could not connect')
     cursor = connection.cursor()
-    request = cursor.execute(("select ID from Books_Tab where Name_Of_Book = '{0}' and Author_Of_Book = '{1}'").format(Name, Author)).fetchall()
+    Name = Name.lower()
+    Author = Author.lower()
+    request = cursor.execute(("select ID from Books_Tab where Name_Of_Book LIKE '%{0}%' and Author_Of_Book LIKE '%{1}%'").format(Name, Author)).fetchall()
     connection.close()
     return request[0][0]
 
@@ -191,7 +196,6 @@ def heh(isb):
         book_name = book_name[book_name.find('>') + 1:book_name.find('</') - 1]
         book_author = str(book_author.prettify())
         book_author = book_author[book_author.find('>') + 1:book_author.find('>/') - 6]
-        print(book_name, book_author)
         return (True, translit(book_name[2:]), author(translit(book_author[2:-1])))
     except:
         return (False, None)

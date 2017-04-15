@@ -58,20 +58,24 @@ def take_book(Student, Book):
     except:
         print('Could not connect')
     cursor = connection.cursor()
+    Student = login2id(Student)
+    Book = isbn2id(Book)
+    if not Book:
+        return (False, 'Этой книги нет в библиотеке')
     try:
         id_vk = cursor.execute("select ID_Vk from Main_Tab where ID = '{0}'".format(Student)).fetchall()[0][0]
     except:
-        return False
+        return (False)
     request = cursor.execute("select * from Books_Of_Snudent where Book = '{0}' and Student = '{1}'".format(Book, Student)).fetchall()
     if request and request[0]:
         vkplus.VkPlus.send(vk, user_id=id_vk, message='Вы уже брали эту книгу')
-        return False
+        return (False, 'Вы уже брали эту книгу')
     cursor.execute(("INSERT INTO Books_Of_Snudent (Student, Book, Date_Of_Receipt, Date_Of_Return) VALUES ('{0}', '{1}', '{2}', '{3}')").format(Student, Book, str(datetime.date.today()), fin_date()))
     cursor.execute("update Books_Tab set In_Stock = In_Stock - 1 where ID = {0}".format(Book))
     connection.commit()
     vkplus.VkPlus.send(vk, user_id=id_vk, message='Вы успешно взяли книгу')
     connection.close()
-    return True
+    return (True)
 
 
 def return_book(Student, Book):
@@ -83,19 +87,34 @@ def return_book(Student, Book):
     except:
         print('Could not connect')
     cursor = connection.cursor()
+    Student = login2id(Student)
+    Book = isbn2id(Book)
+    if not Book:
+        return (False, 'Этой книги нет в библиотеке')
     id_vk = cursor.execute("select ID_Vk from Main_Tab where ID = '{0}'".format(Student)).fetchall()[0][0]
     request = cursor.execute("select * from Books_Of_Snudent where Book = '{0}' and Student = '{1}'".format(Book, Student)).fetchall()
     print(id_vk)
     if not request or not request[0]:
         vkplus.VkPlus.send(vk, user_id=id_vk, message='Чтобы сдать книгу - её нужно сначала взять')
-        return False
+        return (False, 'Чтобы сдать книгу - её нужно сначала взять')
     cursor.execute(("DELETE FROM Books_Of_Snudent where Student = '{0}' and Book = '{1}'").format(Student, Book))
     connection.commit()
     cursor.execute("update Books_Tab set In_Stock = In_Stock + 1 where ID = {0}".format(Book))
     connection.commit()
     vkplus.VkPlus.send(vk, user_id=id_vk, message='Вы успешно сдали книгу')
     connection.close()
-    return True
+    return (True)
+
+
+def true_code(code):
+    print('Trying to connect:')
+    try:
+        connection = sqlite3.connect('TSL.db', timeout=10)
+        print('Connected')
+    except:
+        print('Could not connect')
+    cursor = connection.cursor()
+    return cursor.execute("select * from Main_Tab where gym == '{0}'".format(code)).fetchall()
 
 
 def login2id(login):
@@ -106,6 +125,7 @@ def login2id(login):
     except:
         print('Could not connect')
     cursor = connection.cursor()
+    print('login: ', login)
     id = cursor.execute("select ID from Main_Tab where gym = '{0}'".format(login)).fetchall()[0][0]
     return id
 
@@ -118,5 +138,8 @@ def isbn2id(isbn):
     except:
         print('Could not connect')
     cursor = connection.cursor()
-    id = cursor.execute("select ID from Books_Tab where ISBN = '{0}'".format(isbn)).fetchall()[0][0]
+    try:
+        id = cursor.execute("select ID from Books_Tab where ISBN = '{0}'".format(isbn)).fetchall()[0][0]
+    except:
+        return False
     return id
