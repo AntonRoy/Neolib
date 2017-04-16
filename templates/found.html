@@ -8,12 +8,11 @@
         </div>
         <div>
             <ul class="nav navbar-nav">
-                <li><a href="{{ url_for('main') }}" >Поиск задолженностей</a></li>
-                <li><a href="{{ url_for('addbook') }}" >Добавить книгу</a></li>
                 <li><a href="{{ url_for('get_students')}}">Ученики</a></li>
                 <li><a href="{{ url_for('get_books')}}">Книги</a></li>
+                <li><a href="{{ url_for('main') }}" >Поиск задолженностей</a></li>
+                <li><a href="{{ url_for('addbook') }}" >Добавить книгу</a></li>
                 <li><a href="{{ url_for('logout') }}">Выйти</a></li>
-
             </ul>
         </div>
     </div>
@@ -49,7 +48,7 @@
     <table class="table table-hover table-bordered">
         <thead>
             <tr>
-                <th>Имя</th>
+                <th>Название</th>
                 <th>Дата выдачи</th>
                 <th>Дата сдачи</th>
             </tr>

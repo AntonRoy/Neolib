@@ -8,7 +8,9 @@
         <div>
             <ul class="nav navbar-nav">
                 <li><a href="{{ url_for('get_students')}}">Ученики</a></li>
+                <li class="active"><a href="{{ url_for('get_books')}}">Книги</a></li>
                 <li><a href="{{ url_for('main') }}" >Поиск задолженностей</a></li>
+                <li><a href="{{ url_for('addbook') }}" >Добавить книгу</a></li>
                 <li><a href="{{ url_for('logout') }}">Выйти</a></li>
             </ul>
         </div>
