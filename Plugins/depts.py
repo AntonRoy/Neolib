@@ -19,6 +19,8 @@ class Plugin:
         id = executes_from_bot.ID_Of_Name(msg['user_id'])
         retrn = executes_from_bot.list_of_debts(id)
         cnt = 0
+        if not len(retrn):
+            self.vk.respond(msg, {'message': 'У тебя нет долгов, ты свободен)'})
         for debt in retrn:
             cnt += 1
             self.vk.respond(msg, {'message': str(cnt) + ')' + debt[3] + ', ' + debt[4]})

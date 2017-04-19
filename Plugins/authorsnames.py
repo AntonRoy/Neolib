@@ -9,7 +9,7 @@ class Plugin:
         print('автор')
 
     def getkeys(self):
-        keys = [u'Автор', u'автор']
+        keys = [u'Автор', u'автор', 'auth']
         ret = {}
         for key in keys:
             ret[key] = self
@@ -20,7 +20,8 @@ class Plugin:
         author= ''
         for w in author_s:
             author += w + ' '
-        author = author[:-1]
+        author = author[:-1].lower()
+        print(author)
         books = executes_from_bot.Books_Of_Author_In_Library(author)
         try:
             cnt = 0
