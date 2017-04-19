@@ -95,7 +95,11 @@ def Add_Book(isbn, cnt):
         connection.commit()
         connection.close()
         return (False, False, False)
-    request2 = cursor.execute(("INSERT INTO Books_Tab (ISBN, Name_Of_Book, Author_Of_Book, In_Stock, All_Books) VALUES ('{0}', '{1}', '{2}', '{3}', '{3}')").format(isbn, book_meta[1].lower(), book_meta[2].lower(), cnt)).fetchall()
+    print(book_meta)
+    request2 = cursor.execute("INSERT INTO Books_Tab "
+                               "(ISBN, Name_Of_Book, Author_Of_Book, In_Stock, All_Books) "
+                               "VALUES "
+                               "('{0}', '{1}', '{2}', '{3}', '{3}')".format(isbn, book_meta[1].lower(), book_meta[2].lower(), cnt)).fetchall()
     connection.commit()
     connection.close()
     return book_meta
@@ -191,17 +195,21 @@ def heh(isb):
     soup = BeautifulSoup(html)
     book_name = soup.find('span', itemprop='name')
     book_author = soup.find('span', itemprop='author')
+    lang = str(soup.find('span', itemprop='inLanguage', class_="describe-isbn"))
+    lang = lang[lang.find('>') + 1:lang.find('</')]
     try:
         book_name = str(book_name.prettify())
         book_name = book_name[book_name.find('>') + 1:book_name.find('</') - 1]
         book_author = str(book_author.prettify())
         book_author = book_author[book_author.find('>') + 1:book_author.find('>/') - 6]
-        return (True, translit(book_name[2:]), author(translit(book_author[2:-1])))
+        return (True, translit(book_name[2:], lang), author(translit(book_author[2:-1], lang)))
     except:
         return (False, None)
 
 
-def translit(s):
+def translit(s, lang):
+    if 'russian' not in lang.lower():
+        return s
     i = 0
     s = s.lower()
     sf = ''

@@ -15,11 +15,14 @@ class VkPlus:
                 self.api = vk_api.VkApi(login, password, captcha_handler=captcha_handler)
             else:
                 self.api = vk_api.VkApi(login, password, app_id, captcha_handler=captcha_handler)
-
             self.api.authorization()
         except vk_api.AuthorizationError as error_msg:
             print(error_msg)
             return None
+
+
+    def addUser(self, user_id):
+        self.api.method('friends.add', {'user_id':user_id, 'text':'Привет, я бот этих ушлепков, добавь меня пожалуйста'})
 
 
     def respond(self, to, values):

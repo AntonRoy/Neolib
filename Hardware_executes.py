@@ -36,10 +36,8 @@ def fin_date():
 
 
 def registration(First_Name, Last_Name, ID_Vk, Sex, gym, grade):
-    print('Trying to connect:')
     try:
         connection = sqlite3.connect('TSL.db', timeout=10)
-        print('Connected')
     except:
         print('Could not connect')
     cursor = connection.cursor()
@@ -51,10 +49,8 @@ def registration(First_Name, Last_Name, ID_Vk, Sex, gym, grade):
 
 def take_book(Student, Book):
     global vk
-    print('Trying to connect:')
     try:
         connection = sqlite3.connect('TSL.db', timeout=10)
-        print('Connected')
     except:
         print('Could not connect')
     cursor = connection.cursor()
@@ -64,11 +60,23 @@ def take_book(Student, Book):
         return (False, 'Этой книги нет в библиотеке')
     try:
         id_vk = cursor.execute("select ID_Vk from Main_Tab where ID = '{0}'".format(Student)).fetchall()[0][0]
+        if not id_vk:
+            print(1//0)
     except:
-        return (False)
+        request = cursor.execute("select * from Books_Of_Snudent where Book = '{0}' and Student = '{1}'".format(Book, Student)).fetchall()
+        if request and request[0]:
+            return (False, 'Вы уже брали эту книгу')
+        cursor.execute(("INSERT INTO Books_Of_Snudent (Student, Book, Date_Of_Receipt, Date_Of_Return) VALUES ('{0}', '{1}', '{2}', '{3}')").format(Student, Book, str(datetime.date.today()), fin_date()))
+        cursor.execute("update Books_Tab set In_Stock = In_Stock - 1 where ID = {0}".format(Book))
+        connection.commit()
+        connection.close()
+        return (True)
     request = cursor.execute("select * from Books_Of_Snudent where Book = '{0}' and Student = '{1}'".format(Book, Student)).fetchall()
     if request and request[0]:
-        vkplus.VkPlus.send(vk, user_id=id_vk, message='Вы уже брали эту книгу')
+        try:
+            vkplus.VkPlus.send(vk, user_id=id_vk, message='Вы уже брали эту книгу')
+        except:
+            vkplus.VkPlus.addUser(vk, id_vk)
         return (False, 'Вы уже брали эту книгу')
     cursor.execute(("INSERT INTO Books_Of_Snudent (Student, Book, Date_Of_Receipt, Date_Of_Return) VALUES ('{0}', '{1}', '{2}', '{3}')").format(Student, Book, str(datetime.date.today()), fin_date()))
     cursor.execute("update Books_Tab set In_Stock = In_Stock - 1 where ID = {0}".format(Book))
@@ -80,10 +88,8 @@ def take_book(Student, Book):
 
 def return_book(Student, Book):
     global vk
-    print('Trying to connect:')
     try:
         connection = sqlite3.connect('TSL.db', timeout=10)
-        print('Connected')
     except:
         print('Could not connect')
     cursor = connection.cursor()
@@ -91,9 +97,21 @@ def return_book(Student, Book):
     Book = isbn2id(Book)
     if not Book:
         return (False, 'Этой книги нет в библиотеке')
-    id_vk = cursor.execute("select ID_Vk from Main_Tab where ID = '{0}'".format(Student)).fetchall()[0][0]
+    try:
+        id_vk = cursor.execute("select ID_Vk from Main_Tab where ID = '{0}'".format(Student)).fetchall()[0][0]
+        if not id_vk:
+            print(1//0)
+    except:
+        request = cursor.execute(
+            "select * from Books_Of_Snudent where Book = '{0}' and Student = '{1}'".format(Book, Student)).fetchall()
+        if not request:
+            return (False, 'Чтобы сдать книгу - её нужно сначала взять')
+        cursor.execute(("DELETE FROM Books_Of_Snudent where Student = '{0}' and Book = '{1}'").format(Student, Book))
+        connection.commit()
+        cursor.execute("update Books_Tab set In_Stock = In_Stock + 1 where ID = {0}".format(Book))
+        connection.commit()
+        return (True)
     request = cursor.execute("select * from Books_Of_Snudent where Book = '{0}' and Student = '{1}'".format(Book, Student)).fetchall()
-    print(id_vk)
     if not request or not request[0]:
         vkplus.VkPlus.send(vk, user_id=id_vk, message='Чтобы сдать книгу - её нужно сначала взять')
         return (False, 'Чтобы сдать книгу - её нужно сначала взять')
@@ -107,10 +125,8 @@ def return_book(Student, Book):
 
 
 def true_code(code):
-    print('Trying to connect:')
     try:
         connection = sqlite3.connect('TSL.db', timeout=10)
-        print('Connected')
     except:
         print('Could not connect')
     cursor = connection.cursor()
@@ -118,10 +134,8 @@ def true_code(code):
 
 
 def login2id(login):
-    print('Trying to connect:')
     try:
         connection = sqlite3.connect('TSL.db', timeout=10)
-        print('Connected')
     except:
         print('Could not connect')
     cursor = connection.cursor()
@@ -131,10 +145,8 @@ def login2id(login):
 
 
 def isbn2id(isbn):
-    print('Trying to connect:')
     try:
         connection = sqlite3.connect('TSL.db', timeout=10)
-        print('Connected')
     except:
         print('Could not connect')
     cursor = connection.cursor()

@@ -40,8 +40,9 @@ def signup():
         surname_stud = request.form['surname_stud']
         stud = request.form['id_stud']
         grade_stud = request.form['grade_numb'] #+ request.form['grade_letter']
-        gender = 0 if gender == 1 else 1
+        gender = 1 if gender == 'boy' else 0
         Hardware_executes.registration(name_stud, surname_stud, id_vk, gender, stud, grade_stud)
+        print(gender)
         return redirect(url_for('login'))
     return render_template('signup1.html')
 
@@ -52,13 +53,13 @@ def return_books(id):
     if request.method == 'POST':
         book_isbn = request.form['isbn']
         m = Hardware_executes.return_book(id, book_isbn)
-
         if m:
             m = [m]
-        if m[0]:
+        print(m[0], type(m[0]) == bool)
+        if m[0] and type(m[0]) == bool:
             returned = 'Успешно'
         else:
-            returned = m[1]
+            returned = m[0][1]
         return render_template('return1.html', id=id, returned=returned)
     return render_template('return1.html', id=id, returned=returned)
 
@@ -69,13 +70,13 @@ def take_books(id):
     if request.method == 'POST':
         book_isbn = request.form['isbn']
         m = Hardware_executes.take_book(id, book_isbn)
-        if type(m) == bool:
+        if m:
             m = [m]
-        print('result: ', m)
-        if m[0]:
+        print(m[0], type(m[0]) == bool)
+        if m[0] and type(m[0]) == bool:
             took = 'Успешно'
         else:
-            took = m[1]
+            took = m[0][1]
         return render_template('take1.html', id=id, took=took)
     return render_template('take1.html', id=id, took=took)
 
@@ -88,4 +89,4 @@ def logout():
 app.secret_key = os.urandom(24)
 
 if __name__ == '__main__':
-    app.run(debug=True, host='192.168.43.13', port=2222)
+    app.run(debug=True, host='192.168.122.1', port=2222)

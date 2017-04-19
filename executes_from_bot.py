@@ -23,7 +23,9 @@ def return_date():
     except:
         print('Could not connect')
     cursor = connection.cursor()
-    data = cursor.execute("select ID_Vk, Date_Of_Return from Main_Tab")
+    data = cursor.execute("SELECT ID, Date_Of_Return from Books_Of_Snudent").fetchall()
+    data1 = cursor.execute("SELECT ID_Vk from Main_Tab")
+    data.extend(data1)
     return data
 
 

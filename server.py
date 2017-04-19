@@ -70,7 +70,7 @@ def main():
                 else:
                     grade = int(grade)
                 puple = executes_for_web.mega_search(Sex=gender, Grade=grade, First_Name=name, Last_Name=surname)
-                if len(puple[0]) > 1:
+                if puple and len(puple[0]) > 1:
                     return render_template('newmain.html', stname='', klass='', arrays=puple,
                                            uch=True, a_book=a_book, a_stud=a_stud, div_book=div_book, div_stud=div_stud,
                                            error='')
@@ -95,22 +95,23 @@ def main():
                 title = request.form['title']
                 author = request.form['surname']
                 stname = title + ', ' + author
-                students = executes_for_web.mega_searchBook(Name_Of_Book=title, Author_Of_Book=author)
+                books = executes_for_web.mega_searchBook(Name_Of_Book=title, Author_Of_Book=author)
                 if len(stname) <= 2:
                     stname = "Имя не указано"
                     return render_template('newmain.html', stname=stname, arrays=None, uch=None,
                                            a_book=a_book, a_stud=a_stud, div_book=div_book, div_stud=div_stud, error='')
-                if len(students[0]) > 1:
+                if len(books[0]) > 1:
                     uch = False
-                    return render_template('newmain.html', stname=stname, arrays=students, uch=uch,
+                    return render_template('newmain.html', stname=stname, arrays=books, uch=uch,
                                            a_book=a_book, a_stud=a_stud, div_book=div_book, div_stud=div_stud, error='')
-                elif len(students[0]) == 1:
+                elif len(books[0]) == 1:
                     uch = False
-                    data = executes_for_web.Search_Of_Book(students[0][0][0], students[0][0][1])
+                    data = executes_for_web.Search_Of_Book(books[0][0][0], books[0][0][1])
+                    stname = books[0][0][0][0].upper() + books[0][0][0][1:] + ', ' + books[0][0][1].title()
                     return render_template('found.html', stname=stname, arrays=data, uch=uch)
-                elif len(students[0]) < 1:
+                elif len(books[0]) < 1:
                     error = 'Ничего не найдено'
-                    return render_template('newmain.html', stname=stname, arrays=students, uch=140, a_book=a_book,
+                    return render_template('newmain.html', stname=stname, arrays=books, uch=140, a_book=a_book,
                                            a_stud=a_stud, div_book=div_book, div_stud=div_stud, error=error)
 
     return render_template('newmain.html', stname=None, arrays=None, uch=None,
@@ -197,4 +198,4 @@ def book(name):
 app.secret_key = os.urandom(24)
 
 if __name__ == '__main__':
-    app.run(debug=True, host='192.168.43.13', port=1111)
+    app.run(debug=True, host='192.168.122.1', port=1111)
