@@ -39,7 +39,6 @@ def book_id2book_meta(id):
     return book_meta
 
 
-
 def id2id_vk(id):
     print('Trying to connect:')
     try:

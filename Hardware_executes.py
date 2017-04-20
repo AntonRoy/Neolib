@@ -2,6 +2,7 @@ import sqlite3
 import vkplus
 import settings
 import datetime
+import vk_api
 
 
 vk = vkplus.VkPlus(settings.vk_login, settings.vk_password, settings.vk_app_id)
@@ -45,6 +46,12 @@ def registration(First_Name, Last_Name, ID_Vk, Sex, gym, grade):
     connection.commit()
     connection.close()
 
+
+def getIdByURL(url):
+    url = url.split('/')[-1]
+    boom = vk_api.VkApi()
+    result = boom.method('users.get', {'user_ids':url})
+    return result[0]['id']
 
 
 def take_book(Student, Book):

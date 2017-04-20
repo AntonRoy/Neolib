@@ -34,7 +34,7 @@ def main(id):
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        id_vk = request.form['vk_id']
+        id_vk = Hardware_executes.getIdByURL(request.form['vk_id'])
         gender = request.form['gender']
         name_stud = request.form['name_stud']
         surname_stud = request.form['surname_stud']
@@ -42,7 +42,6 @@ def signup():
         grade_stud = request.form['grade_numb'] #+ request.form['grade_letter']
         gender = 1 if gender == 'boy' else 0
         Hardware_executes.registration(name_stud, surname_stud, id_vk, gender, stud, grade_stud)
-        print(gender)
         return redirect(url_for('login'))
     return render_template('signup1.html')
 
@@ -55,7 +54,6 @@ def return_books(id):
         m = Hardware_executes.return_book(id, book_isbn)
         if m:
             m = [m]
-        print(m[0], type(m[0]) == bool)
         if m[0] and type(m[0]) == bool:
             returned = 'Успешно'
         else:

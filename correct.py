@@ -1,16 +1,14 @@
-import urllib
+from urllib import request
+from urllib.parse import quote
 import json
-
 
 def correct(string):
     s = string.strip().replace(' ', '+')
-    blank = urllib.urlopen('http://speller.yandex.net/services/spellservice.json/checkText?text=%20' + s)
+    blank = request.urlopen('http://speller.yandex.net/services/spellservice.json/checkText?text=%20' + quote(s))
     blank = blank.read()
-    blank = json.loads(blank)
-
+    blank = json.loads(blank.decode())
+    print(blank)
     for word in blank:
-        string = string.decode('utf-8').replace(word[u'word'], word[u's'][0]).encode('utf-8')
+        string = string.replace(word['word'], word['s'][0])
 
     return string
-
-print(correct("Лидя"))
