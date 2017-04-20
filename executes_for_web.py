@@ -19,6 +19,35 @@ def reduce(lis):
     return a
 
 
+def getSmeta(ID):
+    print('Trying to connect:')
+    try:
+        connection = sqlite3.connect('TSL.db', timeout=10)
+        print('Connected')
+    except:
+        print('Could not connect')
+    cursor = connection.cursor()
+    data = cursor.execute("SELECT * FROM Main_Tab WHERE gym = '{0}'".format(ID)).fetchall()
+    return data
+
+
+def update_data(gym, name, surename, sex, grade, id_vk):
+    print('Trying to connect:')
+    try:
+        connection = sqlite3.connect('TSL.db', timeout=10)
+        print('Connected')
+    except:
+        print('Could not connect')
+    cursor = connection.cursor()
+    cursor.execute("update Main_Tab SET First_Name = '{1}' WHERE gym = '{0}'".format(gym, name))
+    cursor.execute("update Main_Tab SET Last_Name = '{1}' WHERE gym = '{0}'".format(gym, surename))
+    cursor.execute("update Main_Tab SET Sex = '{1}' WHERE gym = '{0}'".format(gym, sex))
+    cursor.execute("update Main_Tab SET grade = '{1}' WHERE gym = '{0}'".format(gym, grade))
+    cursor.execute("update Main_Tab SET Firs id_vk = '{1}' WHERE gym = '{0}'".format(gym, id_vk))
+    connection.commit()
+    connection.close()
+    return True
+
 def mega_search(**kwargs):
     print('Trying to connect:')
     try:
