@@ -1,6 +1,7 @@
 import sqlite3
 from bs4 import BeautifulSoup
 import urllib.request
+import correct
 
 def reduce(lis):
     i = 2
@@ -124,7 +125,9 @@ def Add_Book(isbn, cnt):
         connection.commit()
         connection.close()
         return (False, False, False)
-    print(book_meta)
+    rus = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
+    book_meta[1] = book_meta[1] if book_meta[1][0].lower() not in rus else correct.correct(book_meta[1])
+    book_meta[2] = book_meta[2] if book_meta[2][0].lower() not in rus else correct.correct(book_meta[2])
     request2 = cursor.execute("INSERT INTO Books_Tab "
                                "(ISBN, Name_Of_Book, Author_Of_Book, In_Stock, All_Books) "
                                "VALUES "
