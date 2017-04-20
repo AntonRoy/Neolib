@@ -23,12 +23,35 @@ def return_date():
     except:
         print('Could not connect')
     cursor = connection.cursor()
-    data = cursor.execute("SELECT ID, Date_Of_Return from Books_Of_Snudent").fetchall()
-    data1 = cursor.execute("SELECT ID_Vk from Main_Tab")
-    data.extend(data1)
+    data = cursor.execute("SELECT Student, Book, Date_Of_Return from Books_Of_Snudent").fetchall()
     return data
 
 
+def book_id2book_meta(id):
+    print('Trying to connect:')
+    try:
+        connection = sqlite3.connect('TSL.db')
+        print('Connected')
+    except:
+        print('Could not connect')
+    cursor = connection.cursor()
+    book_meta = cursor.execute("SELECT Name_Of_Book, Author_Of_Book FROM Books_Tab WHERE ID = '{0}'").format(id)
+    return book_meta
+
+
+
+def id2id_vk(id):
+    print('Trying to connect:')
+    try:
+        connection = sqlite3.connect('TSL.db')
+        print('Connected')
+    except:
+        print('Could not connect')
+    cursor = connection.cursor()
+    id_vk = cursor.execute("SELECT id_vk FROM Main_Tab WHERE ID = '{0}'".format(id))
+    if id_vk:
+        return id_vk
+    return False
 
 def Books_Of_Author_In_Library(Author):
     print('Trying to connect:')
