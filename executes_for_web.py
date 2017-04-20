@@ -43,7 +43,7 @@ def update_data(gym, name, surename, sex, grade, id_vk):
     cursor.execute("update Main_Tab SET Last_Name = '{1}' WHERE gym = '{0}'".format(gym, surename))
     cursor.execute("update Main_Tab SET Sex = '{1}' WHERE gym = '{0}'".format(gym, sex))
     cursor.execute("update Main_Tab SET grade = '{1}' WHERE gym = '{0}'".format(gym, grade))
-    cursor.execute("update Main_Tab SET Firs id_vk = '{1}' WHERE gym = '{0}'".format(gym, id_vk))
+    cursor.execute("update Main_Tab SET id_vk = '{1}' WHERE gym = '{0}'".format(gym, id_vk))
     connection.commit()
     connection.close()
     return True

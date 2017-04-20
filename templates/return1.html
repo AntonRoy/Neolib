@@ -1,5 +1,6 @@
 {%extends "layer.html"%}
 {% block body %}
+
 <nav class="navbar navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -9,6 +10,7 @@
             <ul class="nav navbar-nav">
                 <li><a href="{{url_for('take_books', id=id) }}">Взять книгу</a></li>
                 <li class="active"><a href="{{url_for('return_books', id=id) }}">Сдать книгу</a></li>
+                <li><a href="{{url_for('profile', id=id) }}">Ваш профиль</a></li>
                 <li><a href="{{ url_for('logout') }}">Выйти</a></li>
             </ul>
         </div>
@@ -16,9 +18,9 @@
 </nav>
 <br>
 <div class="container" align="center">
-    <h1>Итак, Вы хотите сдать книгу</h1>
+    <h1>И так, Вы хотите сдать книгу</h1>
     <p>Просканируйте штрих-код на книге, которую вы хотите сдать, с помощью сканера.</p>
-    <h2 class="text-warning">{{returned}}</h2>
+    <h2 class="text-warning text">{{returned}}</h2>
     <div class="row">
         <form method="post" class="form-inline">
             <div class="form-group ">
@@ -30,4 +32,10 @@
         </form>
     </div>
 </div>
+<script type="text/javascript" src="//yastatic.net/jslibs/loader.js"></script>
+<script type="text/javascript">
+	setTimeout(function(){$('.text').fadeOut('fast')},3000);  //30000 = 30 секунд
+</script>
+
+
 {% endblock %}

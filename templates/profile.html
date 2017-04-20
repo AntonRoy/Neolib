@@ -1,0 +1,50 @@
+{%extends "layer.html"%}
+{% block body %}
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <span class="navbar-brand">Электронная система управления библиотекой</span>
+        </div>
+        <div>
+            <ul class="nav navbar-nav">
+                <li><a href="{{url_for('take_books', id=id) }}">Взять книгу</a></li>
+                <li><a href="{{url_for('return_books', id=id) }}">Сдать книгу</a></li>
+                <li class="active"><a href="{{url_for('profile', id=id) }}">Ваш профиль</a></li>
+                <li><a href="{{ url_for('logout') }}">Выйти</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<br>
+<br>
+<div class="container" align="center">
+    <h1>{{name}}</h1>
+    <h3>Класс: {{grade}}</h3>
+    <h3>Пол: {{gender}}</h3>
+    <h3>Логин в ВК: {{login}}</h3>
+    <br>
+    <div class="table-responsive">
+    <table class="table table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Дата выдачи</th>
+                <th>Дата сдачи</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in arrays %}
+            <tr>
+                <th>{{i[0]}}</th>
+                <th>{{i[1]}}</th>
+                <th>{{i[2]}}</th>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+</div>
+    <a class="btn btn-danger" href="{{url_for('rename', id=id) }}">Изменить</a>
+</div>
+
+{% endblock %}

@@ -9,6 +9,7 @@
             <ul class="nav navbar-nav">
                 <li class="active"><a href="{{url_for('take_books', id=id) }}">Взять книгу</a></li>
                 <li><a href="{{url_for('return_books', id=id) }}">Сдать книгу</a></li>
+                <li><a href="{{url_for('profile', id=id) }}">Ваш профиль</a></li>
                 <li><a href="{{ url_for('logout') }}">Выйти</a></li>
             </ul>
         </div>

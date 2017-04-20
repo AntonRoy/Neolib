@@ -39,8 +39,8 @@
         <div class="form-group" align="left">
             <label for="b"> <b class="text-danger" align="left">Имя*</b></label>
             <input type="text" class="form-control input-md" id="b" name="surname_stud" placeholder="Ваша Фамилия">
-        </div alig>
-        <b><b class="text-danger">Класс*</b></b>
+        </div>
+        <b class="text-danger">Класс*</b>
         <select name="grade_numb">
             {%for i in range(5, 12)%}
             <option>{{i}}</option>
@@ -51,7 +51,7 @@
             <option>Б</option>
             <option>В</option>
         </select>
-        <b></b><b class="text-danger">Пол*</b>
+        <b class="text-danger">Пол*</b>
         <input type="radio" value="boy" name="gender">Мужской
         <input type="radio" value="girl" name="gender">Женский
         <input class="btn btn-success btn-md" type = 'submit'  value="Отправить!">

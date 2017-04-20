@@ -64,6 +64,28 @@ def return_books(id):
     return render_template('return1.html', id=id, returned=returned)
 
 
+@app.route("/profile/<id>", methods=['GET', "POST"])
+def profile(id):
+    _, gender,grade,name,surname,id_vk,id_gym = executes_for_web.getSmeta(id)[0]
+    gender = "Мужской" if gender == 1 else "Женский"
+    data = executes_for_web.Search_Of_Student([name, surname])
+    return render_template("profile.html", name=name+' '+surname, grade=grade, gender=gender,login=id_vk, arrays=data, id=id)
+
+
+@app.route("/rename/<id>", methods=['GET', "POST"])
+def rename(id):
+    _, gender,grade,name,surname,id_vk,id_gym = executes_for_web.getSmeta(id)[0]
+    if request.method == "POST":
+        name =request.form['name']
+        surname = request.form['surname']
+        grade = request.form['grade_numb']
+        gender = request.form['gender']
+        vk_id = request.form['login']
+        executes_for_web.update_data(id, name, surname, gender, grade, vk_id)
+        return redirect(url_for('profile', id=id))
+    return render_template("rename.html", name=name,surname=surname, grade=grade, gender=gender,login=id_vk, id=id)
+
+
 @app.route('/take_books/<id>', methods=['GET', 'POST'])
 def take_books(id):
     took = ''
@@ -89,4 +111,4 @@ def logout():
 app.secret_key = os.urandom(24)
 
 if __name__ == '__main__':
-    app.run(debug=True, host='192.168.122.1', port=2222)
+    app.run(debug=True)
