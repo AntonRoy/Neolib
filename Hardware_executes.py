@@ -88,7 +88,10 @@ def take_book(Student, Book):
     cursor.execute(("INSERT INTO Books_Of_Snudent (Student, Book, Date_Of_Receipt, Date_Of_Return) VALUES ('{0}', '{1}', '{2}', '{3}')").format(Student, Book, str(datetime.date.today()), fin_date()))
     cursor.execute("update Books_Tab set In_Stock = In_Stock - 1 where ID = {0}".format(Book))
     connection.commit()
-    vkplus.VkPlus.send(vk, user_id=id_vk, message='Вы успешно взяли книгу')
+    try:
+        vkplus.VkPlus.send(vk, user_id=id_vk, message='Вы успешно взяли книгу')
+    except:
+        pass
     connection.close()
     return (True)
 
@@ -126,7 +129,10 @@ def return_book(Student, Book):
     connection.commit()
     cursor.execute("update Books_Tab set In_Stock = In_Stock + 1 where ID = {0}".format(Book))
     connection.commit()
-    vkplus.VkPlus.send(vk, user_id=id_vk, message='Вы успешно сдали книгу')
+    try:
+        vkplus.VkPlus.send(vk, user_id=id_vk, message='Вы успешно сдали книгу')
+    except:
+        pass
     connection.close()
     return (True)
 

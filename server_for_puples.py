@@ -34,7 +34,11 @@ def main(id):
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        id_vk = Hardware_executes.getIdByURL(request.form['vk_id'])
+        id_vk = request.form['vk_id']
+        try:
+            id_vk = Hardware_executes.getIdByURL(id_vk)
+        except:
+            pass
         gender = request.form['gender']
         name_stud = request.form['name_stud']
         surname_stud = request.form['surname_stud']
@@ -109,4 +113,4 @@ def logout():
 app.secret_key = os.urandom(24)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host="192.168.122.1", port=2222)

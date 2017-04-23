@@ -49,6 +49,22 @@ def update_data(gym, name, surename, sex, grade, id_vk):
     connection.close()
     return True
 
+
+def update_BookData(isbn, name, author):
+    print('Trying to connect:')
+    try:
+        connection = sqlite3.connect('TSL.db', timeout=10)
+        print('Connected')
+    except:
+        print('Could not connect')
+    cursor = connection.cursor()
+    cursor.execute("update Books_Tab SET Name_Of_Book = '{1}' WHERE isbn = '{0}'".format(isbn, name.lower()))
+    cursor.execute("update Books_Tab SET Author_Of_Book = '{1}' WHERE isbn = '{0}'".format(isbn, author.lower()))
+    connection.commit()
+    connection.close()
+    return True
+
+
 def mega_search(**kwargs):
     print('Trying to connect:')
     try:
@@ -125,9 +141,6 @@ def Add_Book(isbn, cnt):
         connection.commit()
         connection.close()
         return (False, False, False)
-    rus = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
-    book_meta[1] = book_meta[1] if book_meta[1][0].lower() not in rus else correct.correct(book_meta[1])
-    book_meta[2] = book_meta[2] if book_meta[2][0].lower() not in rus else correct.correct(book_meta[2])
     request2 = cursor.execute("INSERT INTO Books_Tab "
                                "(ISBN, Name_Of_Book, Author_Of_Book, In_Stock, All_Books) "
                                "VALUES "
@@ -135,6 +148,7 @@ def Add_Book(isbn, cnt):
     connection.commit()
     connection.close()
     return book_meta
+
 
 def Search_Of_Student(name):
     print('Trying to connect:')
@@ -154,7 +168,6 @@ def Search_Of_Student(name):
     return request
 
 
-
 def Search_Of_Book(Book, Author):
     print('Trying to connect:')
     try:
@@ -172,7 +185,8 @@ def Search_Of_Book(Book, Author):
     connection.close()
     return request
 
-def select_tab(tab):
+
+def select_tab(tab, start_line):
     print('Trying to connect:')
     try:
         connection = sqlite3.connect('TSL.db', timeout=10)
@@ -181,8 +195,8 @@ def select_tab(tab):
         print('Could not connect')
     cursor = connection.cursor()
     if tab:
-        return list(map(lambda x: x[:-1], cursor.execute("select * from Books_Tab").fetchall()))
-    return list(map(lambda x: x[:-2], cursor.execute("select * from Main_Tab").fetchall()))
+        return list(map(lambda x: x[:-1], cursor.execute("select * from Books_Tab WHERE ID >= '{0}' and ID < '{0}' + 10".format(start_line)).fetchall()))
+    return list(map(lambda x: x[:-2], cursor.execute("select * from Main_Tab WHERE ID >= '{0}' and ID < '{0}' + 10".format(start_line)).fetchall()))
     connection.close()
 
 

@@ -164,7 +164,7 @@ def addbook():
 
 @app.route('/get_students', methods=['GET', 'POST'])
 def get_students():
-    stud = executes_for_web.select_tab(0)
+    stud = executes_for_web.select_tab(0, 1)
 
     return render_template('stud.html', stud=stud)
 
@@ -176,7 +176,7 @@ def title(string):
 @app.route('/get_books', methods=['GET', 'POST'])
 def get_books():
     books = list(map(lambda x: [x[0], x[1], x[2], x[3][0].upper() + x[3][1:], title(x[4])],
-                      list(map(list, executes_for_web.select_tab(1)))))
+                      list(map(list, executes_for_web.select_tab(1, 1)))))
 
     return render_template('book.html', books=books)
 

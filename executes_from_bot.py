@@ -35,7 +35,7 @@ def book_id2book_meta(id):
     except:
         print('Could not connect')
     cursor = connection.cursor()
-    book_meta = cursor.execute("SELECT Name_Of_Book, Author_Of_Book FROM Books_Tab WHERE ID = '{0}'").format(id)
+    book_meta = cursor.execute("SELECT Name_Of_Book, Author_Of_Book FROM Books_Tab WHERE ID = '{0}'".format(id)).fetchall()
     return book_meta
 
 
@@ -47,7 +47,7 @@ def id2id_vk(id):
     except:
         print('Could not connect')
     cursor = connection.cursor()
-    id_vk = cursor.execute("SELECT id_vk FROM Main_Tab WHERE ID = '{0}'".format(id))
+    id_vk = cursor.execute("SELECT id_vk FROM Main_Tab WHERE ID = '{0}'".format(id)).fetchall()
     if id_vk:
         return id_vk
     return False
