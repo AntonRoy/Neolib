@@ -76,11 +76,7 @@
         {%for i in arrays[0]%}
         <div class="panel panel-danger">
                 <div class="panel-body">
-                    <form method="post" id="{{i[0]}}">
-                    <input type="hidden" value="{{i}}" name="stud">
-                    <input type="hidden" value="True" name="type">
-                    <a onclick="document.getElementById('{{i[0]}}').submit(); return false; console.log('get');">{{i[0] + ', ' + i[1]}}</a>
-                    </form>
+                    <a href="{{url_for('student', name=i[0]+'_'+i[1])}}">{{i[0] + ', ' + i[1]}}</a>
                 </div>
         </div>
             {%endfor%}
@@ -112,11 +108,7 @@
         {%for i in arrays[0]%}
     <div class="panel panel-danger">
             <div class="panel-body">
-                <form method="post" id="{{i[0]}}">
-                <input type="hidden" value="{{i}}" name="stud">
-                <input type="hidden" value="False" name="type">
-                <a onclick="document.getElementById('{{i[0]}}').submit(); return false; console.log('get');">{{i[0] + ', ' + i[1]}}</a>
-                </form>
+                <a href="{{url_for('books',name=i[0]+'_'+i[1])}}">{{i[0] + ', ' + i[1]}}</a>
             </div>
     </div>
             {%endfor%}

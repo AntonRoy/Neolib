@@ -99,8 +99,6 @@ def take_books(id):
         print(m[0], type(m[0]) == bool)
         if m[0] and type(m[0]) == bool:
             took = 'Успешно'
-        else:
-            took = m[0][1]
         return render_template('take1.html', id=id, took=took)
     return render_template('take1.html', id=id, took=took)
 

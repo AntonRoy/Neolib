@@ -2,7 +2,7 @@ from flask import *
 from flask_bootstrap import Bootstrap
 import os
 import executes_for_web
-import Hardware_executes
+#import Hardware_executes
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
@@ -39,80 +39,60 @@ def main():
     div_stud = 'tab-pane active fade in'
     div_book = 'tab-pane fade in'
     if request.method == 'POST':
-        try:
-            selectedStud = request.form['stud']
-            types = request.form['type']
-            if types:
-                uch = True
-                data = executes_for_web.Search_Of_Student(list(map(lambda x: x[1:-1], selectedStud[1:-1].split(', '))))
-                stname = list(map(lambda x: x[1:-1], selectedStud[1:-1].split(', ')))
+        select = request.form["select"]
+        if select == 'По ученику':
+            name = request.form['name']
+            surname = request.form['surname']
+            grade = request.form['numclass']  # + request.form['letterclass']
+            try:
+                gender = 1 if request.form['gender'] == 'boy' else 0
+            except:
+                gender = ''
+            if grade in "--":
+                grade = ''
             else:
-                a_stud = ''
-                a_book = 'active'
-                div_stud = 'tab-pane fade in'
-                div_book = 'tab-pane active fade in'
+                grade = int(grade)
+            puple = executes_for_web.mega_search(Sex=gender, Grade=grade, First_Name=name, Last_Name=surname)
+            if puple and len(puple[0]) > 1:
+                return render_template('newmain.html', stname='', klass='', arrays=puple,
+                                       uch=True, a_book=a_book, a_stud=a_stud, div_book=div_book, div_stud=div_stud,
+                                       error='')
+            elif len(puple) == 1 and puple[0]:
+                return redirect(url_for('student', name=puple[0][0][0] + '_' + puple[0][0][1]))
+            else:
+                uch = None
+                error = "Ничего не найдено"
+                a_stud = 'active'
+                a_book = ''
+                div_stud = 'tab-pane active fade in'
+                div_book = 'tab-pane fade in'
+                return render_template('newmain.html', stname=name + ' ' + surname, klass='', arrays=[],
+                                       error=error, a_book=a_book, a_stud=a_stud, div_book=div_book,
+                                       div_stud=div_stud)
+        elif select == 'По книге':
+            a_stud = ''
+            a_book = 'active'
+            div_stud = 'tab-pane fade in'
+            div_book = 'tab-pane active fade in'
+            title = request.form['title'].lower()
+            author = request.form['surname'].lower()
+            stname = title + ', ' + author
+            books = executes_for_web.mega_searchBook(Name_Of_Book=title, Author_Of_Book=author)
+            if len(stname) <= 2:
+                stname = "Имя не указано"
+                return render_template('newmain.html', stname=stname, arrays=None, uch=None,
+                                       a_book=a_book, a_stud=a_stud, div_book=div_book, div_stud=div_stud, error='')
+            if len(books[0]) > 1:
                 uch = False
-                selectedStud = selectedStud[1:-1].split(', ')
-                data = executes_for_web.Search_Of_Book(selectedStud[1], selectedStud[0])
-            return render_template('found.html', stname=stname[0] + ' ' + stname[1], arrays=data, uch=uch)
-        except:
-            select = request.form["select"]
-            if select == 'По ученику':
-                name = request.form['name']
-                surname = request.form['surname']
-                grade = request.form['numclass']  # + request.form['letterclass']
-                try:
-                    gender = 1 if request.form['gender'] == 'boy' else 0
-                except:
-                    gender = ''
-                if grade in "--":
-                    grade = ''
-                else:
-                    grade = int(grade)
-                puple = executes_for_web.mega_search(Sex=gender, Grade=grade, First_Name=name, Last_Name=surname)
-                if puple and len(puple[0]) > 1:
-                    return render_template('newmain.html', stname='', klass='', arrays=puple,
-                                           uch=True, a_book=a_book, a_stud=a_stud, div_book=div_book, div_stud=div_stud,
-                                           error='')
-                elif len(puple) == 1 and puple[0]:
-                    books = executes_for_web.Search_Of_Student(puple[0][0])
-                    return render_template('found.html', stname=puple[0][0][0] + ' ' + puple[0][0][1], klass='', arrays=books)
-                else:
-                    uch = None
-                    error = "Ничего не найдено"
-                    a_stud = 'active'
-                    a_book = ''
-                    div_stud = 'tab-pane active fade in'
-                    div_book = 'tab-pane fade in'
-                    return render_template('newmain.html', stname=name + ' ' + surname, klass='', arrays=[],
-                                           error=error, a_book=a_book, a_stud=a_stud, div_book=div_book,
-                                           div_stud=div_stud)
-            elif select == 'По книге':
-                a_stud = ''
-                a_book = 'active'
-                div_stud = 'tab-pane fade in'
-                div_book = 'tab-pane active fade in'
-                title = request.form['title']
-                author = request.form['surname']
-                stname = title + ', ' + author
-                books = executes_for_web.mega_searchBook(Name_Of_Book=title, Author_Of_Book=author)
-                if len(stname) <= 2:
-                    stname = "Имя не указано"
-                    return render_template('newmain.html', stname=stname, arrays=None, uch=None,
-                                           a_book=a_book, a_stud=a_stud, div_book=div_book, div_stud=div_stud, error='')
-                if len(books[0]) > 1:
-                    uch = False
-                    return render_template('newmain.html', stname=stname, arrays=books, uch=uch,
-                                           a_book=a_book, a_stud=a_stud, div_book=div_book, div_stud=div_stud, error='')
-                elif len(books[0]) == 1:
-                    uch = False
-                    data = executes_for_web.Search_Of_Book(books[0][0][0], books[0][0][1])
-                    stname = books[0][0][0][0].upper() + books[0][0][0][1:] + ', ' + books[0][0][1].title()
-                    return render_template('found.html', stname=stname, arrays=data, uch=uch)
-                elif len(books[0]) < 1:
-                    error = 'Ничего не найдено'
-                    return render_template('newmain.html', stname=stname, arrays=books, uch=140, a_book=a_book,
-                                           a_stud=a_stud, div_book=div_book, div_stud=div_stud, error=error)
+                return render_template('newmain.html', stname=stname, arrays=books, uch=uch,
+                                       a_book=a_book, a_stud=a_stud, div_book=div_book, div_stud=div_stud, error='')
+            elif len(books[0]) == 1:
+                stname = books[0][0][0][0].upper() + books[0][0][0][1:] + '_' + books[0][0][1].title()
+                return redirect(url_for('book', name=stname))
+            elif len(books[0]) < 1:
+                error = 'Ничего не найдено'
+                return render_template('newmain.html', stname=stname, arrays=books, uch=140, a_book=a_book,
+                                       a_stud=a_stud, div_book=div_book, div_stud=div_stud, error=error)
 
     return render_template('newmain.html', stname=None, arrays=None, uch=None,
                            a_book=a_book, a_stud=a_stud, div_book=div_book, div_stud=div_stud, error="")
@@ -192,10 +172,14 @@ def student(name):
 def book(name):
     name = tuple(name.split('_'))
     data = executes_for_web.Search_Of_Book(name[0].lower(), name[1].lower())
+    if request.method == "POST":
+        label =request.form['name']
+        author = request.form['author']
+
     return render_template('found.html', uch=False, arrays=data, stname=name[0] + ', ' + name[1])
 
 
 app.secret_key = os.urandom(24)
 
 if __name__ == '__main__':
-    app.run(debug=True, host='192.168.122.1', port=1111)
+    app.run(debug=True)
