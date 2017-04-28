@@ -1,7 +1,7 @@
 import sqlite3
 from bs4 import BeautifulSoup
 import urllib.request
-import correct
+from correct import correct
 
 def reduce(lis):
     i = 2
@@ -50,7 +50,7 @@ def update_data(gym, name, surename, sex, grade, id_vk):
     return True
 
 
-def update_BookData(isbn, name, author):
+def update_BookData(old_name, old_auth, name, author):
     print('Trying to connect:')
     try:
         connection = sqlite3.connect('TSL.db', timeout=10)
@@ -58,8 +58,8 @@ def update_BookData(isbn, name, author):
     except:
         print('Could not connect')
     cursor = connection.cursor()
-    cursor.execute("update Books_Tab SET Name_Of_Book = '{1}' WHERE isbn = '{0}'".format(isbn, name.lower()))
-    cursor.execute("update Books_Tab SET Author_Of_Book = '{1}' WHERE isbn = '{0}'".format(isbn, author.lower()))
+    cursor.execute("update Books_Tab SET Name_Of_Book = '{2}' WHERE Name_Of_Book = '{0}' and Author_Of_Book = '{1}'".format(old_name, old_auth, name.lower()))
+    cursor.execute("update Books_Tab SET Author_Of_Book = '{2}' WHERE Name_Of_Book = '{0}' and Author_Of_Book = '{1}'".format(old_name, old_auth, author.lower()))
     connection.commit()
     connection.close()
     return True
@@ -137,6 +137,14 @@ def Add_Book(isbn, cnt):
         connection.close()
         return (True, name, auth)
     book_meta = list(heh(isbn))
+    try:
+        book_meta[1] = correct(book_meta[1])
+    except:
+        pass
+    try:
+        book_meta[2] = correct(book_meta[2])
+    except:
+        pass
     if not book_meta[0]:
         connection.commit()
         connection.close()
@@ -144,7 +152,10 @@ def Add_Book(isbn, cnt):
     request2 = cursor.execute("INSERT INTO Books_Tab "
                                "(ISBN, Name_Of_Book, Author_Of_Book, In_Stock, All_Books) "
                                "VALUES "
-                               "('{0}', '{1}', '{2}', '{3}', '{3}')".format(isbn, book_meta[1].lower(), book_meta[2].lower(), cnt)).fetchall()
+                               "('{0}', '{1}', '{2}', '{3}', '{3}')".format(isbn,
+                                                                            book_meta[1].lower(),
+                                                                            book_meta[2].lower(),
+                                                                            cnt)).fetchall()
     connection.commit()
     connection.close()
     return book_meta
