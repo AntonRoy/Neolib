@@ -58,8 +58,9 @@ def update_BookData(old_name, old_auth, name, author):
     except:
         print('Could not connect')
     cursor = connection.cursor()
-    cursor.execute("update Books_Tab SET Name_Of_Book = '{2}' WHERE Name_Of_Book = '{0}' and Author_Of_Book = '{1}'".format(old_name, old_auth, name.lower()))
-    cursor.execute("update Books_Tab SET Author_Of_Book = '{2}' WHERE Name_Of_Book = '{0}' and Author_Of_Book = '{1}'".format(old_name, old_auth, author.lower()))
+    print(author)
+    cursor.execute("update Books_Tab SET Name_Of_Book = '{2}' WHERE Name_Of_Book = '{0}' and Author_Of_Book = '{1}'".format(old_name.lower(), old_auth.lower(), name.lower()))
+    cursor.execute("update Books_Tab SET Author_Of_Book = '{2}' WHERE Name_Of_Book = '{0}' and Author_Of_Book = '{1}'".format(name.lower(), old_auth.lower(), author.lower()))
     connection.commit()
     connection.close()
     return True

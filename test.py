@@ -4,7 +4,7 @@ import executes_for_web
 cnn = sqlite3.connect('TSL.db')
 cur = cnn.cursor()
 
-#print(cur.execute("select * from Books_Tab WHERE Name_Of_Book LIKE '%{0}%'".format('в')).fetchall())
+print(cur.execute("select * from Books_Tab WHERE Name_Of_Book = '{0}'".format('литература', 'коровина')).fetchall())
 #print(cur.execute("select * from Main_Tab").fetchall())
 #print(cur.execute("select * from Books_Of_Snudent").fetchall())
 #cur.execute("DELETE FROM Books_Of_Snudent")
@@ -16,6 +16,7 @@ def update_seq(num):
     cur.execute("update sqlite_sequence set seq = {0}".format(num))
 
 #update_seq(0)
+
 
 
 cnn.commit()

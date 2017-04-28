@@ -171,15 +171,18 @@ def student(name):
 @app.route('/book/<name>', methods=['GET', 'POST'])
 def book(name):
     name = tuple(name.split('_'))
+    print(name)
     data = executes_for_web.Search_Of_Book(name[0].lower(), name[1].lower())
     if request.method == "POST":
         label =request.form['name']
         author = request.form['author']
-
+        print(label, author)
+        executes_for_web.update_BookData(name[0], name[1], label, author)
+        return redirect('/book/{0}_{1}'.format(label, author))
     return render_template('found.html', uch=False, arrays=data, stname=name[0] + ', ' + name[1])
 
 
 app.secret_key = os.urandom(24)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
