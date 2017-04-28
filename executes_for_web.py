@@ -249,7 +249,7 @@ def get_html(url):
 
 
 def heh(isb):
-    html = get_html('http://www.bookfinder.com/search/?author=&title=&lang=en&isbn='+ str(isb) + '&new_used=*&destination=ru&currency=RUB&mode=basic&st=sr&ac=qr')
+    html = get_html('https://www.bookfinder.com/search/?author=&title=&lang=en&isbn=' + str(isb) + '&new_used=*&destination=ru&currency=RUB&mode=basic&st=sr&ac=qr')
     soup = BeautifulSoup(html)
     book_name = soup.find('span', itemprop='name')
     book_author = soup.find('span', itemprop='author')

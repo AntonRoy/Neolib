@@ -46,18 +46,25 @@
         </table>
          <div class="row">
 
-
+{% if books[0][0] != 1 %}
              <div align="left" class="col-md-6">
+
                  <form method="post">
-                     <button class="btn btn-info" name="Previous">&laquo; Предыдущие 10</button>
+                     <input type="hidden" name="num" value="{{books[0][0]}}">
+                     <input type="submit" class="btn btn-info" name="btn" value="&laquo; Предыдущие 10">
                  </form>
              </div>
-
+             {% else %}
+             <div class="col-md-6"></div>
+             {% endif %}
+             {% if col == 10 %}
              <div class="col-md-6" align="right">
                  <form method="post">
-                     <button class="btn btn-info" name="Next">Cледующие 10 &raquo;</button>
+                     <input type="hidden" name="num" value="{{books[-1][0]}}">
+                     <input type="submit" class="btn btn-info" name="btn" value="Cледующие 10 &raquo;">
                  </form>
              </div>
+             {% endif %}
          </div>
     </div>
 </div>
