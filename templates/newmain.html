@@ -108,7 +108,7 @@
         {%for i in arrays[0]%}
     <div class="panel panel-danger">
             <div class="panel-body">
-                <a href="{{url_for('books',name=i[0]+'_'+i[1])}}">{{i[0] + ', ' + i[1]}}</a>
+                <a href="{{url_for('book',name=i[0]+'_'+i[1])}}">{{i[0] + ', ' + i[1]}}</a>
             </div>
     </div>
             {%endfor%}
