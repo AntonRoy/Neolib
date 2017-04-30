@@ -33,15 +33,20 @@
             </label>
         </div>
         <div class="form-group">
-            <label> Ваш логин во "Вконтакте":
+            <label> Ваша страница "Вконтакте":
                 <input name="login" class="form-control input-md" value="{{login}}">
             </label>
         </div>
           <b >Класс:</b>
         <select name="grade_numb">
             {% for i in range(5, 12) %}
-            <option>{{i}}</option>
-            {%endfor%}
+                {% if i != grade %}
+                    <option >{{i}}</option>
+            {% else %}
+            <option selected> {{i}}</option>
+                {% endif %}
+            {% endfor %}
+
         </select>
         <select name="grade_letter">
             <option>A</option>
@@ -49,13 +54,16 @@
             <option>В</option>
         </select>
         <b>Пол:</b>
-        {% if gender == 1 %}
-        <input type="radio" value="boy" name="gender" checked>Мужской
-        <input type="radio" value="girl" name="gender">Женский
-         {% else %}
+        {% if gender == 1 or gender == 'Мужской' %}
+        <input type="radio" value="1" name="gender" checked>Мужской
+        <input type="radio" value="0" name="gender">Женский
+         {% elif gender == 0 or gender == "Женский" %}
         <input type="radio" value="1" name="gender">Мужской
         <input type="radio" value="0" name="gender" checked>Женский
-         {%endif%}
+        {% else %}
+        <input type="radio" value="1" name="gender" >Мужской
+        <input type="radio" value="0" name="gender">Женский
+         {% endif %}
             <br>
         <br>
         <input type="submit" class="btn btn-success" value="Cохранить">

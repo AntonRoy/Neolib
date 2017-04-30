@@ -111,4 +111,4 @@ def logout():
 app.secret_key = os.urandom(24)
 
 if __name__ == '__main__':
-    app.run(debug=True, host="192.168.122.1", port=2222)
+    app.run(debug=True, port=2222)
