@@ -142,7 +142,7 @@ def addbook():
     return render_template('add book.html', all_returned='', problem='', variant=variant)
 
 
-@app.route('/get_students', methods=['GET', 'POST'])
+@app.route('/student', methods=['GET', 'POST'])
 def get_students():
     stud = executes_for_web.select_tab(0, 1)
 
@@ -153,7 +153,7 @@ def title(string):
     return ' '.join(list(map(lambda x: x[0].upper() + x[1:], string.split())))
 
 
-@app.route('/get_books', methods=['GET', 'POST'])
+@app.route('/book', methods=['GET', 'POST'])
 def get_books():
     if request.method == "POST":
         print("Кнопка - ",request.form['btn'])
