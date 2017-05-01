@@ -42,7 +42,7 @@ def registration(First_Name, Last_Name, ID_Vk, Sex, gym, grade):
     except:
         print('Could not connect')
     cursor = connection.cursor()
-    cursor.execute("INSERT INTO Main_Tab (First_Name, Last_Name, ID_Vk, Sex, gym, Grade) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')".format(First_Name, Last_Name, ID_Vk, Sex, gym, grade))
+    cursor.execute("INSERT INTO Main_Tab (ID, First_Name, Last_Name, ID_Vk, Sex, gym, Grade) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}')".format(cursor.execute("SELECT COUNT(*) FROM Main_Tab").fetchall()[0][0] + 1, First_Name, Last_Name, ID_Vk, Sex, gym, grade))
     connection.commit()
     connection.close()
 

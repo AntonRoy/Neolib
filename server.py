@@ -157,13 +157,12 @@ def title(string):
 def get_books():
     if request.method == "POST":
         print("Кнопка - ",request.form['btn'])
-        num = int(request.form['num']) if 'Cледующие' in request.form['btn'] else int(request.form['num']) - 10
-        print(num)
-        books = list(map(lambda x: [x[0], x[1], x[2], x[3][0].upper() + x[3][1:], title(x[4])],
+        num = int(request.form['num']) + 1 if 'Cледующие' in request.form['btn'] else int(request.form['num']) - 10
+        books = list(map(lambda x: [x[0], x[1].capitalize(), title(x[2]), x[3], x[4]],
                          list(map(list, executes_for_web.select_tab(1, num)))))
         col = len(books)
         return render_template('book.html', books=books, col=col)
-    books = list(map(lambda x: [x[0], x[1], x[2], x[3][0].upper() + x[3][1:], title(x[4])],
+    books = list(map(lambda x: [x[0], x[1].capitalize(), title(x[2]), x[3], x[4]],
                       list(map(list, executes_for_web.select_tab(1, 1)))))
     col = len(books)
     return render_template('book.html', books=books, col=col)
@@ -193,4 +192,4 @@ def book(name):
 app.secret_key = os.urandom(24)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host="192.168.122.1", port=1111)

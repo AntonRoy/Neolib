@@ -114,7 +114,7 @@ def add_book_f(Name, Auth, isbn, cnt):
     except:
         print('Could not connect')
     cursor = connection.cursor()
-    cursor.execute(("INSERT INTO Books_Tab (ISBN, Name_Of_Book, Author_Of_Book, In_Stock, All_Books) VALUES ('{0}', '{1}', '{2}', '{3}', '{3}')").format(isbn, Name.lower(), Auth.lower(), cnt))
+    cursor.execute(("INSERT INTO Books_Tab (ID, ISBN, Name_Of_Book, Author_Of_Book, In_Stock, All_Books) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{4}'})").format(cursor.execute("SELECT COUNT(*) FROM Books_Tab").fetchall()[0][0] + 1, isbn, Name.lower(), Auth.lower(), cnt))
     connection.commit()
     connection.close()
     return [True, Name, Auth]
@@ -151,9 +151,10 @@ def Add_Book(isbn, cnt):
         connection.close()
         return (False, False, False)
     request2 = cursor.execute("INSERT INTO Books_Tab "
-                               "(ISBN, Name_Of_Book, Author_Of_Book, In_Stock, All_Books) "
+                               "(ID, ISBN, Name_Of_Book, Author_Of_Book, In_Stock, All_Books) "
                                "VALUES "
-                               "('{0}', '{1}', '{2}', '{3}', '{3}')".format(isbn,
+                               "('{0}', '{1}', '{2}', '{3}', '{4}', '{4}')".format(cursor.execute("SELECT COUNT(*) FROM Books_Tab").fetchall()[0][0] + 1,
+                                                                            isbn,
                                                                             book_meta[1].lower(),
                                                                             book_meta[2].lower(),
                                                                             cnt)).fetchall()
