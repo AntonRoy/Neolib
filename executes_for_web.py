@@ -20,6 +20,55 @@ def reduce(lis):
     return a
 
 
+def stud2arch(gym):
+    print('Trying to connect:')
+    try:
+        connection = sqlite3.connect('TSL.db', timeout=10)
+        print('Connected')
+    except:
+        print('Could not connect')
+    cursor = connection.cursor()
+    ID, name, surname, gender, grade, Let, id_gym, id_vk = cursor.execute("SELECT * FROM Main_Tab WHERE gym = '{0}'".format(gym)).fetchall()[0]
+    debets = cursor.execute("SELECT * FROM Books_Of_Snudent WHERE Student = '{0}'".format(ID)).fetchall()
+    if debets:
+        return False
+    cursor.execute("INSERT INTO Students_Arch"
+                   "(ID, First_Name, Last_Name, Sex, Grade, gym, ID_Vk, Let)"
+                   "VALUES"
+                   "('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}')".format(cursor.execute("SELECT COUNT(*) FROM Students_Arch").fetchall()[0][0] + 1, name, surname, gender, grade, id_gym, id_vk, Let))
+    cursor.execute("DELETE FROM Main_Tab WHERE ID = '{0}'".format(ID))
+    for i in range(ID + 1, cursor.execute("SELECT COUNT(*) FROM Main_Tab").fetchall()[0][0] + 2):
+        cursor.execute("UPDATE Books_Of_Snudent SET Student = '{0}' - 1 WHERE Student = '{0}'".format(i))
+        cursor.execute("UPDATE Main_Tab SET ID = '{0}' - 1 WHERE ID = '{0}'".format(i))
+    connection.commit()
+    connection.close()
+    return True
+
+
+def book2arch(isbn):
+    print('Trying to connect:')
+    try:
+        connection = sqlite3.connect('TSL.db', timeout=10)
+        print('Connected')
+    except:
+        print('Could not connect')
+    cursor = connection.cursor()
+    ID, name, author, in_stock, all_books = cursor.execute("SELECT * FROM Books_Tab WHERE ISBN = '{0}'".format(isbn)).fetchall()[0]
+    if in_stock != all_books:
+        return False
+    cursor.execute("INSERT INTO Books_Arch"
+                   "(ID, Name_Of_Book, Author_Of_Book, In_Stock, All_Books, gym, ID_Vk, Let)"
+                   "VALUES"
+                   "('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}')".format(cursor.execute("SELECT COUNT(*) FROM Students_Arch").fetchall()[0][0] + 1, name, surname, gender, grade, id_gym, id_vk, Let))
+    cursor.execute("DELETE FROM Main_Tab WHERE ID = '{0}'".format(ID))
+    for i in range(ID + 1, cursor.execute("SELECT COUNT(*) FROM Main_Tab").fetchall()[0][0] + 2):
+        cursor.execute("UPDATE Books_Of_Snudent SET Student = '{0}' - 1 WHERE Student = '{0}'".format(i))
+        cursor.execute("UPDATE Main_Tab SET ID = '{0}' - 1 WHERE ID = '{0}'".format(i))
+    connection.commit()
+    connection.close()
+    return True
+
+
 def getSmeta(ID):
     print('Trying to connect:')
     try:
