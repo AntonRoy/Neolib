@@ -257,8 +257,8 @@ def select_tab(tab, start_line):
         print('Could not connect')
     cursor = connection.cursor()
     if tab:
-        return list(map(lambda x: x[:-1], cursor.execute("select * from Books_Tab WHERE ID >= '{0}' and ID < '{0}' + 10".format(start_line)).fetchall()))
-    return list(map(lambda x: x[:-2], cursor.execute("select * from Main_Tab WHERE ID >= '{0}' and ID < '{0}' + 10".format(start_line)).fetchall()))
+        return list(map(lambda x: x[:-1], cursor.execute("select * from Books_Tab WHERE ID >= '{0}' and ID < '{0}' + 10".format(start_line)).fetchall())) #ID, Название, Автор, В наличии, Всего, ISBN
+    return list(map(lambda x: x[:-1], cursor.execute("select * from Main_Tab WHERE ID >= '{0}' and ID < '{0}' + 10".format(start_line)).fetchall())) #ID, Имя, Фамилия, Пол, Класс, Буква, индификатор в системе(gym)
     connection.close()
 
 

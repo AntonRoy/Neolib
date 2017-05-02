@@ -3,7 +3,6 @@ from flask_bootstrap import Bootstrap
 import os
 import executes_for_web
 import Hardware_executes
-import sqlite3
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
