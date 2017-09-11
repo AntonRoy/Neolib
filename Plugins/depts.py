@@ -23,4 +23,4 @@ class Plugin:
             self.vk.respond(msg, {'message': 'У тебя нет долгов, ты свободен)'})
         for debt in retrn:
             cnt += 1
-            self.vk.respond(msg, {'message': str(cnt) + ')' + debt[3] + ', ' + debt[4]})
+            self.vk.respond(msg, {'message': str(cnt) + ')' + debt[1] + ', ' + debt[2]})
