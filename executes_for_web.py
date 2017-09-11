@@ -19,7 +19,7 @@ def reduce(lis):
         i += 1
     return a
 
-
+#!!!!!!!!!!!!!!!АРХИВАЦИЯ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 def stud2arch(gym):
     try:
         connection = sqlite3.connect('TSL.db', timeout=10)
@@ -42,7 +42,7 @@ def stud2arch(gym):
     connection.close()
     return True
 
-
+#!!!!!!!!!!!!!!!АРХИВАЦИЯ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 def book2arch(isbn):
     print('Trying to connect:')
     try:
@@ -243,7 +243,7 @@ def Search_Of_Book(Book, Author):
     connection.close()
     return request
 
-
+#!!!!!!!!!!!!!!!!ТАБЛИЦА КНИГ, НАХОДЯЩИХСЯ НА РУКАХ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 def get_debets():
     try:
         connection = sqlite3.connect('TSL.db', timeout=10)
@@ -255,8 +255,8 @@ def get_debets():
     for student in students:
         debets = cursor.execute("select Book, Date_Of_Receipt, Date_Of_Return from Books_Of_Snudent where Student = '{0}'".format(student[0])).fetchall()
         for debet in debets:
-            book_meta = cursor.execute("select Name_Of_Book, Author_Of_Book where ID == '{0}'".format(debet[0])).fetchall()
-            debets_tab.append(student + debet[1:] + book_meta)
+            book_meta = cursor.execute("select Name_Of_Book, Author_Of_Book from Books_Tab where ID == '{0}'".format(debet[0])).fetchall()[0]
+            debets_tab.append(list(student) + list(debet[1:]) + list(book_meta))
     return debets_tab
 
 
