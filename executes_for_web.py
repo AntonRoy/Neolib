@@ -244,7 +244,7 @@ def Search_Of_Book(Book, Author):
     return request
 
 #!!!!!!!!!!!!!!!!ТАБЛИЦА КНИГ, НАХОДЯЩИХСЯ НА РУКАХ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-def get_debets():
+def get_debets():#ничего передавать не надо
     try:
         connection = sqlite3.connect('TSL.db', timeout=10)
     except:
@@ -256,8 +256,8 @@ def get_debets():
         debets = cursor.execute("select Book, Date_Of_Receipt, Date_Of_Return from Books_Of_Snudent where Student = '{0}'".format(student[0])).fetchall()
         for debet in debets:
             book_meta = cursor.execute("select Name_Of_Book, Author_Of_Book from Books_Tab where ID == '{0}'".format(debet[0])).fetchall()[0]
-            debets_tab.append(list(student) + list(debet[1:]) + list(book_meta))
-    return debets_tab
+            debets_tab.append(list(student) + list(book_meta) + list(debet[1:]))
+    return debets_tab #СПИСОК ВИДА: [[1, 'Антон', 'Ройтерштейн', 'русский язык 9 класс учебник фгос', 'рыбченкова л', '2017-09-08', '2017-09-22'], ...]
 
 
 def select_tab(tab, start_line):
