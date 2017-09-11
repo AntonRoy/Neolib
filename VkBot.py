@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import os
 import sys
 import time
@@ -34,7 +32,6 @@ def main():
 
     print('---------------------------')
 
-    # Регистрируем плагины
     for plugin in plugins.values():
         for key, value in plugin.getkeys().items():
             cmds[key] = value
