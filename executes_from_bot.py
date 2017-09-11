@@ -1,25 +1,21 @@
 import sqlite3
 
 def Book_In_Library(Name_Of_Book1, Author_Of_Book1):
-    print('Trying to connect:')
     try:
         connection = sqlite3.connect('TSL.db')
-        print('Connected')
     except:
         print('Could not connect')
     cursor = connection.cursor()
     request = cursor.execute(("select * from Books_Tab where Name_Of_Book like '%{0}%' and Author_Of_Book like '%{1}%' and Books_Tab.In_Stock > 0").format(Name_Of_Book1, Author_Of_Book1)).fetchall()
     connection.close()
     if request:
-        return (True, request[0][3][0].upper() + request[0][3][1:], request[0][4].title())
+        return (True, request[0][1][0].upper() + request[0][1][1:], request[0][2].title())
     return False
 
 
 def return_date():
-    print('Trying to connect:')
     try:
         connection = sqlite3.connect('TSL.db')
-        print('Connected')
     except:
         print('Could not connect')
     cursor = connection.cursor()
@@ -28,10 +24,8 @@ def return_date():
 
 
 def book_id2book_meta(id):
-    print('Trying to connect:')
     try:
         connection = sqlite3.connect('TSL.db')
-        print('Connected')
     except:
         print('Could not connect')
     cursor = connection.cursor()
@@ -40,10 +34,8 @@ def book_id2book_meta(id):
 
 
 def id2id_vk(id):
-    print('Trying to connect:')
     try:
         connection = sqlite3.connect('TSL.db')
-        print('Connected')
     except:
         print('Could not connect')
     cursor = connection.cursor()
@@ -53,10 +45,8 @@ def id2id_vk(id):
     return False
 
 def Books_Of_Author_In_Library(Author):
-    print('Trying to connect:')
     try:
         connection = sqlite3.connect('TSL.db')
-        print('Connected')
     except:
         print('Could not connect')
     cursor = connection.cursor()
@@ -68,10 +58,8 @@ def Books_Of_Author_In_Library(Author):
 
 
 def list_of_debts(ID_In_Database):
-    print('Trying to connect:')
     try:
         connection = sqlite3.connect('TSL.db')
-        print('Connected')
     except:
         print('Could not connect')
     cursor = connection.cursor()
@@ -87,10 +75,8 @@ def list_of_debts(ID_In_Database):
 
 
 def ID_Of_Name(ID_Vk):
-    print('Trying to connect:')
     try:
         connection = sqlite3.connect('TSL.db')
-        print('Connected')
     except:
         print('Could not connect')
     cursor = connection.cursor()
@@ -100,10 +86,8 @@ def ID_Of_Name(ID_Vk):
 
 
 def Book_Of_Id(ID):
-    print('Trying to connect:')
     try:
         connection = sqlite3.connect('TSL.db')
-        print('Connected')
     except:
         print('Could not connect')
     cursor = connection.cursor()
@@ -113,10 +97,8 @@ def Book_Of_Id(ID):
 
 
 def Books_Of_Genre_In_Library(Genre):
-    print('Trying to connect:')
     try:
         connection = sqlite3.connect('TSL.db')
-        print('Connected')
     except:
         print('Could not connect')
     cursor = connection.cursor()
