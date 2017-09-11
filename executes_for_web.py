@@ -21,10 +21,8 @@ def reduce(lis):
 
 
 def stud2arch(gym):
-    print('Trying to connect:')
     try:
         connection = sqlite3.connect('TSL.db', timeout=10)
-        print('Connected')
     except:
         print('Could not connect')
     cursor = connection.cursor()
@@ -231,10 +229,8 @@ def Search_Of_Student(name):
 
 
 def Search_Of_Book(Book, Author):
-    print('Trying to connect:')
     try:
         connection = sqlite3.connect('TSL.db', timeout=10)
-        print('Connected')
     except:
         print('Could not connect')
     cursor = connection.cursor()
@@ -246,6 +242,22 @@ def Search_Of_Book(Book, Author):
         request[student][0] = student_name[0][0] + ' ' + student_name[0][1]
     connection.close()
     return request
+
+
+def get_debets():
+    try:
+        connection = sqlite3.connect('TSL.db', timeout=10)
+    except:
+        print('Could not connect')
+    cursor = connection.cursor()
+    debets_tab = []
+    students = cursor.execute("select ID, First_Name, Last_Name from Main_Tab").fetchall()
+    for student in students:
+        debets = cursor.execute("select Book, Date_Of_Receipt, Date_Of_Return from Books_Of_Snudent where Student = '{0}'".format(student[0])).fetchall()
+        for debet in debets:
+            book_meta = cursor.execute("select Name_Of_Book, Author_Of_Book where ID == '{0}'".format(debet[0])).fetchall()
+            debets_tab.append(student + debet[1:] + book_meta)
+    return debets_tab
 
 
 def select_tab(tab, start_line):
@@ -316,8 +328,6 @@ def heh(isb):
 
 
 def translit(s, lang):
-    if 'russian' not in lang.lower():
-        return s
     i = 0
     s = s.lower()
     sf = ''
@@ -339,6 +349,9 @@ def translit(s, lang):
                 sf += 'ь'
             elif s[i] == 'a':
                 sf += 'я'
+        elif s[i] == 'и' and s[i + 1] == 'у':
+            i += 1
+            sf += 'ю'
         elif s[i] == 'z' and s[i + 1] == 'h':
             i += 1
             sf += 'ж'
