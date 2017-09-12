@@ -2,7 +2,6 @@ from flask import *
 from flask_bootstrap import Bootstrap
 import os
 import executes_for_web
-#import Hardware_executes
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
@@ -193,4 +192,4 @@ def book(name):
 app.secret_key = os.urandom(24)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='192.168.122.1', port=1111)
