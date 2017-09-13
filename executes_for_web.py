@@ -290,6 +290,22 @@ def ID_Of_Name(name):
     return request[0][0]
 
 
+def gym_Of_Name(name):
+    print('Trying to connect:')
+    try:
+        connection = sqlite3.connect('TSL.db', timeout=10)
+        print('Connected')
+    except:
+        print('Could not connect')
+    cursor = connection.cursor()
+    name = list(name)
+    name[0] = name[0].lower().title()
+    name[1] = name[1].lower().title()
+    request = cursor.execute(("select gym from Main_Tab where First_Name LIKE '%{0}%' and Last_Name LIKE '%{1}%'").format(name[0], name[1])).fetchall()
+    connection.close()
+    return request[0][0]
+
+
 def ID_Of_Book(Name, Author):
     print('Trying to connect:')
     try:
