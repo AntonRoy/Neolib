@@ -274,6 +274,21 @@ def select_tab(tab, start_line):
     connection.close()
 
 
+def book2isbn(book_name):
+    try:
+        connection = sqlite3.connect('TSL.db', timeout=10)
+    except:
+        print('Could not connect')
+    cursor = connection.cursor()
+    name = list(book_name)
+    name[0] = name[0].lower().title()
+    name[1] = name[1].lower().title()
+    request = cursor.execute(
+        ("select isbn from Books_Tab where Name_Of_Book LIKE '%{0}%' and Author_Of_Book LIKE '%{1}%'").format(name[0], name[1])).fetchall()
+    connection.close()
+    return request[0][0]
+
+
 def ID_Of_Name(name):
     print('Trying to connect:')
     try:
@@ -290,7 +305,7 @@ def ID_Of_Name(name):
     return request[0][0]
 
 
-def gym_Of_Name(name):
+def name2gym(name):
     print('Trying to connect:')
     try:
         connection = sqlite3.connect('TSL.db', timeout=10)
