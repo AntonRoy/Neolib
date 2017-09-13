@@ -26,10 +26,10 @@
             <thead>
             <tr>
                 <th>N</th>
-                <th>В наличии</th>
-                <th>Всего</th>
                 <th>Название</th>
                 <th>Автор</th>
+                <th>В наличии</th>
+                <th>Всего</th>
             </tr>
            </thead>
             <tbody>
@@ -39,7 +39,7 @@
                 <th>{{i[1]}}</th>
                 <th>{{i[2]}}</th>
                 <th>{{i[3]}}</th>
-                <th>{{i[4]}} <a href="{{ url_for('book', name=i[3]+ '_' +i[4])}}">Перейти &raquo;</a></th>
+                <th>{{i[4]}} <a href="{{ url_for('book', name=i[1]+ '_' +i[2])}}">Перейти &raquo;</a></th>
             </tr>
             {% endfor %}
             </tbody>

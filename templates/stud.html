@@ -25,24 +25,24 @@
             <thead>
             <tr class="text-priority">
                 <th>N</th>
-                <th>Пол</th>
-                <th>Класс</th>
                 <th>Имя</th>
                 <th>Фамилия</th>
+                <th>Пол</th>
+                <th>Класс</th>
             </tr>
            </thead>
             <tbody>
             {%for i in stud%}
             <tr>
                 <th>{{i[0]}}</th>
-                {% if i[1] == 1 %}
+                <th>{{i[1]}}</th>
+                <th>{{i[2]}}</th>
+                {% if i[3] == 1 %}
                 <th>Мужской</th>
                 {% else %}
                 <th>Женский</th>
                 {% endif %}
-                <th>{{i[2]}}</th>
-                <th>{{i[3]}}</th>
-                <th>{{i[4]}} <a href="{{ url_for('student', name=i[3]+ '_' +i[4])}}">Перейти &raquo;</a></th>
+                <th>{{i[4]}} <a href="{{ url_for('student', name=i[1]+ '_' +i[2])}}">Перейти &raquo;</a></th>
             </tr>
             {% endfor %}
             </tbody>
