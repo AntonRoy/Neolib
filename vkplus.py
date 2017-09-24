@@ -8,7 +8,6 @@ def captcha_handler(captcha):
 class VkPlus:
     api = None
 
-
     def __init__(self, login, password, app_id=-1):
         try:
             if app_id == -1:
@@ -18,12 +17,9 @@ class VkPlus:
             self.api.authorization()
         except vk_api.AuthorizationError as error_msg:
             print(error_msg)
-            return None
-
 
     def addUser(self, user_id):
         self.api.method('friends.add', {'user_id':user_id, 'text':'Привет, я бот этих ушлепков, добавь меня пожалуйста'})
-
 
     def respond(self, to, values):
         if 'chat_id' in to:
@@ -36,7 +32,6 @@ class VkPlus:
 
     def send(self, **kwargs):
         self.api.method('messages.send', kwargs)
-
 
     def markasread(self, id):
         values = {

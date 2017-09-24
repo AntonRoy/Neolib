@@ -32,7 +32,6 @@ def login():
 
 @app.route('/main', methods=['GET', 'POST'])
 def main():
-    stname = None
     a_stud = 'active'
     a_book = ''
     div_stud = 'tab-pane active fade in'
@@ -59,7 +58,6 @@ def main():
             elif len(puple) == 1 and puple[0]:
                 return redirect(url_for('student', name=puple[0][0][0] + '_' + puple[0][0][1]))
             else:
-                uch = None
                 error = "Ничего не найдено"
                 a_stud = 'active'
                 a_book = ''
@@ -125,7 +123,8 @@ def addbook():
             else:
                 _, name, auth = executes_for_web.Add_Book(code, cnt)
                 if _:
-                    return render_template('add book.html', all_returned='Добавлено {0}, {1}!'.format(name, auth), problem='', variant=variant)
+                    return render_template('add book.html', all_returned='Добавлено {0}, {1}!'.format(name, auth),
+                                           problem='', variant=variant)
                 else:
                     variant = 1
                     return render_template('add book.html', all_returned='',
@@ -136,7 +135,8 @@ def addbook():
             scan = request.form['scan']
             col = request.form['col']
             _, book_name, book_auth = executes_for_web.add_book_f(name_book, author_book, scan, col)
-            return render_template('add book.html', all_returned='Добавлено {0}, {1}!'.format(book_name, book_auth), problem='', variant='0')
+            return render_template('add book.html', all_returned='Добавлено {0}, {1}!'.format(book_name, book_auth),
+                                   problem='', variant='0')
 
     return render_template('add book.html', all_returned='', problem='', variant=variant)
 
@@ -155,7 +155,7 @@ def title(string):
 @app.route('/get_books', methods=['GET', 'POST'])
 def get_books():
     if request.method == "POST":
-        print("Кнопка - ",request.form['btn'])
+        print("Кнопка - ", request.form['btn'])
         num = int(request.form['num']) + 1 if 'Cледующие' in request.form['btn'] else int(request.form['num']) - 10
         print(num)
         books = list(map(lambda x: [x[0], x[1][0].upper() + x[1][1:], title(x[2]), x[3], x[4]],
@@ -163,7 +163,7 @@ def get_books():
         col = len(books)
         return render_template('book.html', books=books, col=col)
     books = list(map(lambda x: [x[0], x[1][0].upper() + x[1][1:], title(x[2]), x[3], x[4]],
-                      list(map(list, executes_for_web.select_tab(1, 1)))))
+                     list(map(list, executes_for_web.select_tab(1, 1)))))
     col = len(books)
     return render_template('book.html', books=books, col=col)
 
@@ -172,7 +172,16 @@ def get_books():
 def student(name):
     name = tuple(name.split('_'))
     data = executes_for_web.Search_Of_Student(name)
-    return render_template('found.html', uch=True, arrays=data, stname=name[0] + ' ' + name[1])
+    if request.method == 'POST':
+        print(name)
+        user_id = executes_for_web.name2gym(name)
+        if executes_for_web.stud2arch(user_id):
+            return render_template('found.html', uch=True, arrays=data, stname=name[0] + ' ' + name[1],
+                                   flag='Архивация прошла успешно.')
+        else:
+            return render_template('found.html', uch=True, arrays=data, stname=name[0] + ' ' + name[1],
+                                   flag='Произошла ошибка. Видимо, у ученика еще есть долги.')
+    return render_template('found.html', uch=True, arrays=data, stname=name[0] + ' ' + name[1], flag="")
 
 
 @app.route('/book/<name>', methods=['GET', 'POST'])
@@ -181,15 +190,25 @@ def book(name):
     print(name)
     data = executes_for_web.Search_Of_Book(name[0].lower(), name[1].lower())
     if request.method == "POST":
-        label =request.form['name']
-        author = request.form['author']
-        print(label, author)
-        executes_for_web.update_BookData(name[0], name[1], label, author)
-        return redirect('/book/{0}_{1}'.format(label, author))
-    return render_template('found.html', uch=False, arrays=data, stname=name[0] + ', ' + name[1])
+        if request.form['flag'] == 'archive':
+            print(name)
+            book_isbn = executes_for_web.book2isbn(name)
+            if executes_for_web.stud2arch(book_isbn):
+                return render_template('found.html', uch=True, arrays=data, stname=name[0] + ' ' + name[1],
+                                       flag='Архивация прошла успешно.')
+            else:
+                return render_template('found.html', uch=True, arrays=data, stname=name[0] + ' ' + name[1],
+                                       flag='Произошла ошибка. Видимо, у ученика еще есть долги.')
+        elif request.form['flag'] == 'edit':
+            label = request.form['name']
+            author = request.form['author']
+            print(label, author)
+            executes_for_web.update_BookData(name[0], name[1], label, author)
+            return redirect('/book/{0}_{1}'.format(label, author))
+    return render_template('found.html', uch=False, arrays=data, stname=name[0] + ', ' + name[1], flag='')
 
 
 app.secret_key = os.urandom(24)
 
 if __name__ == '__main__':
-    app.run(host='192.168.122.1', port=1111)
+    app.run(debug=True)  # host='192.168.122.1', port=1111)

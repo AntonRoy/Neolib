@@ -42,9 +42,15 @@
             </tbody>
         </table>
     </div>
-    <div align="right">
-    </div>
+
     <br>
+    <div align="right">
+             <form method="post">
+                 <input type="hidden" value="archive" name="flag">
+                <button class="btn btn-warning">архивировать</button>
+             </form>
+        </div>
+         <h4 align="center">{{ flag }}</h4>
     {%else%}
     <div class="table-responsive">
     <table class="table table-hover table-bordered">
@@ -65,9 +71,14 @@
             {%endfor%}
         </tbody>
     </table>
-        <div align="right">
+        <div align="right" class="btn-inline">
             <a class="btn btn-warning" data-toggle="modal" data-target="#edit">Редактировать</a>
+             <form method="post">
+                 <input type="hidden" value="archive" name="flag">
+                <button class="btn btn-danger">архивировать</button>
+             </form>
         </div>
+         <h4 align="center">{{ flag }}</h4>
         <div class="modal fade" id="edit">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -77,6 +88,7 @@
                     </div>
                     <div class="modal-body">
                         <form method="post">
+                            <input type="hidden" value="edit" name="flag">
                             <div class="form-group">
                                 <label> Название:
                                     <input name="name" class="form-control input-xl" value="{{stname.split(', ')[0]}}">
