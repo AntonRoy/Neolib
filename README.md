@@ -1,6 +1,6 @@
 
 School library automatization
 
-I was 13
+We were 13
 
-I was writing the most dirty code in the world
+We were writing the dirtiest code in the world
